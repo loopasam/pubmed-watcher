@@ -1,0 +1,5 @@
+26 Feb 2013 17:21:02,274 INFO  ~ Starting /home/samuel/git/pubmed-watcher
+26 Feb 2013 17:21:02,993 WARN  ~ You're running Play! in DEV mode
+26 Feb 2013 17:21:03,099 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+26 Feb 2013 17:21:05,821 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL;LOCK_MODE=0
+26 Feb 2013 17:21:06,529 INFO  ~ Application 'pubmed-watcher' is now started !
