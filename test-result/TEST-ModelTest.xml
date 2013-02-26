@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<testsuite failures="0" time="0.259" errors="0" skipped="0" tests="1" name="ModelTest">
-  <testcase classname="ModelTest" name="createAndRetrieveUser" time="0.259">
+<testsuite failures="0" time="0.238" errors="0" skipped="0" tests="2" name="ModelTest">
+  <testcase classname="ModelTest" name="createAndRetrieveUser" time="0.213">
+      </testcase>
+  <testcase classname="ModelTest" name="createRelatedArticle" time="0.025">
       </testcase>
 </testsuite>

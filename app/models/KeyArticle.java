@@ -12,7 +12,6 @@ import play.db.jpa.Model;
 @Entity
 public class KeyArticle extends Model {
 	
-	@Id
 	public int pmid;
 	
 	public String title;
