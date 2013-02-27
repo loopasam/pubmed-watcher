@@ -16,7 +16,7 @@ public class RelatedArticle extends Model {
 	public int similarity;
 
 	public int standardizedSimilarity;
-
+	
 	@ManyToOne
 	public User user;
 

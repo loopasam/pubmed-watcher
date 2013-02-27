@@ -1,5 +1,11 @@
-26 Feb 2013 19:03:31,053 INFO  ~ Starting /home/samuel/git/pubmed-watcher
-26 Feb 2013 19:03:31,726 WARN  ~ You're running Play! in DEV mode
-26 Feb 2013 19:03:31,827 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
-26 Feb 2013 19:03:35,944 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL;LOCK_MODE=0
-26 Feb 2013 19:03:36,835 INFO  ~ Application 'pubmed-watcher' is now started !
+27 Feb 2013 11:49:02,288 INFO  ~ Starting /home/samuel/git/pubmed-watcher
+27 Feb 2013 11:49:02,916 WARN  ~ You're running Play! in DEV mode
+27 Feb 2013 11:49:03,019 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+27 Feb 2013 11:49:06,639 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL;LOCK_MODE=0
+27 Feb 2013 11:49:07,487 INFO  ~ Application 'pubmed-watcher' is now started !
+27 Feb 2013 11:49:32,455 WARN  ~ SQL Error: 23503, SQLState: 23503
+27 Feb 2013 11:49:32,455 ERROR ~ Referential integrity constraint violation: "FK4DA4793F803AAFC1: PUBLIC.USER_RELATEDARTICLE FOREIGN KEY(RELATEDARTICLES_ID) REFERENCES PUBLIC.RELATEDARTICLE(ID) (5)"; SQL statement:
+delete from RelatedArticle where id=? [23503-166]
+27 Feb 2013 11:49:32,455 WARN  ~ SQL Error: 23503, SQLState: 23503
+27 Feb 2013 11:49:32,455 ERROR ~ Referential integrity constraint violation: "FK4DA4793F803AAFC1: PUBLIC.USER_RELATEDARTICLE FOREIGN KEY(RELATEDARTICLES_ID) REFERENCES PUBLIC.RELATEDARTICLE(ID) (5)"; SQL statement:
+delete from RelatedArticle where id=? [23503-166]
