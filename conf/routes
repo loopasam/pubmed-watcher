@@ -3,7 +3,15 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
+GET     /                                       Presentation.index
+
+# Secure module
+GET     /auth                                       Security.auth
+*     /logout                                       Security.logout
+GET     /login                                       Security.login
+
+# Feed
+GET     /feed/                                       Application.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

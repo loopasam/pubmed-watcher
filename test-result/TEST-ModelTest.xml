@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<testsuite failures="0" time="0.067" errors="0" skipped="0" tests="5" name="ModelTest">
-  <testcase classname="ModelTest" name="markAsRead" time="0.013">
+<testsuite failures="0" time="0.046" errors="0" skipped="0" tests="5" name="ModelTest">
+  <testcase classname="ModelTest" name="markAsRead" time="0.011">
       </testcase>
-  <testcase classname="ModelTest" name="addKeyArticle" time="0.013">
+  <testcase classname="ModelTest" name="addKeyArticle" time="0.008">
       </testcase>
-  <testcase classname="ModelTest" name="removeKeyArticle" time="0.022">
+  <testcase classname="ModelTest" name="removeKeyArticle" time="0.017">
       </testcase>
-  <testcase classname="ModelTest" name="createAndRetrieveUser" time="0.004">
+  <testcase classname="ModelTest" name="createAndRetrieveUser" time="0.003">
       </testcase>
-  <testcase classname="ModelTest" name="useRelatedArticleRelation" time="0.015">
+  <testcase classname="ModelTest" name="useRelatedArticleRelation" time="0.007">
       </testcase>
 </testsuite>

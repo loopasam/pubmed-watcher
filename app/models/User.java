@@ -9,14 +9,21 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import controllers.Application;
+
 import play.db.jpa.Model;
+import play.libs.WS;
+import play.libs.WS.HttpResponse;
+import play.libs.XPath;
 
 @Entity
 public class User extends Model {
 
 	public String email;
 
-	//Get it via http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pubmed&db=pubmed&id=20210808&cmd=neighbor_score
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	public List<RelatedArticle> relatedArticles;
 
@@ -34,7 +41,7 @@ public class User extends Model {
 	}
 
 	public void addRelatedArticle(int pmid, int similarity) {
-		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity).save();
+		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity);
 		this.relatedArticles.add(newRelatedArticle);
 		this.save();
 	}
@@ -48,7 +55,7 @@ public class User extends Model {
 	}
 
 	public void addKeyArticle(int pmid) {
-		KeyArticle newKeyArticle = new KeyArticle(this, pmid).save();
+		KeyArticle newKeyArticle = new KeyArticle(this, pmid);
 		this.keyArticles.add(newKeyArticle);
 		this.save();
 	}
@@ -58,6 +65,27 @@ public class User extends Model {
 		this.keyArticles.remove(keyArticleToDetach);
 		keyArticleToDetach.delete();
 		this.save();
+	}
+
+	public void updateRelatedArticles() {
+
+		this.addKeyArticle(23273493);
+
+		for (KeyArticle keyArticle : this.keyArticles) {
+			System.out.println("Getting related articles: " + keyArticle.pmid);
+			HttpResponse res = WS.url("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?" +
+					"dbfrom=pubmed&db=pubmed&id="+keyArticle.pmid+"&cmd=neighbor_score").get();
+			int status = res.getStatus();
+			//TODO faire les XPATH ici
+			System.out.println("status: " + status);
+			Document xml = res.getXml();
+			for(Node event: XPath.selectNodes("LinkSet//LinkSetDb[0]/Link", xml)) {
+				String name = XPath.selectText("name", event);
+				String data = XPath.selectText("@date", event);
+
+			}
+		}
+
 	}
 
 }

@@ -1,4 +1,8 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-#{welcome /}
+<h1>Logged in</h1>
+<a href="/logout">Logout</a>
+<p>${user.email}</p>
+<p>Key articles goes here</p>
+<p>list of related articles goes there - filling triggered via AJAX from ids</p>
