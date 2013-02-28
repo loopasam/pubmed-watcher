@@ -10,6 +10,7 @@ public class ModelTest extends UnitTest {
 	@Before
 	public void setup() {
 		Fixtures.deleteDatabase();
+		Fixtures.loadModels("data.yml");
 	}
 
 	@Test
@@ -23,8 +24,8 @@ public class ModelTest extends UnitTest {
 	@Test
 	public void useRelatedArticleRelation() {
 		User bob = new User("bob@gmail.com").save();
-		bob.addRelatedArticle(1234, 90);
-		bob.addRelatedArticle(12345, 80);
+		bob.addRelatedArticle(1234, 90, 45);
+		bob.addRelatedArticle(12345, 80, 56);
 		assertEquals(2, bob.relatedArticles.size());
 		
 		assertEquals(1, User.count());
@@ -46,8 +47,8 @@ public class ModelTest extends UnitTest {
 	@Test
 	public void markAsRead() {
 		User bob = new User("bob@gmail.com").save();
-		bob.addRelatedArticle(1234, 90);
-		bob.addRelatedArticle(12345, 80);
+		bob.addRelatedArticle(1234, 90, 34);
+		bob.addRelatedArticle(12345, 80, 56);
 		assertEquals(2, bob.relatedArticles.size());
 		assertEquals(0, bob.readArticlePmids.size());
 		bob.markAsRead(bob.relatedArticles.get(0).id);

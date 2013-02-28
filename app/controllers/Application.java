@@ -28,8 +28,10 @@ public class Application extends Controller {
 		}else{
 			System.out.println("already updated");
 		}
-
-		render(user);
+		renderArgs.put("email", user.email);
+		List<RelatedArticle> relatedArticles = RelatedArticle.find("byUser", user).fetch(10);
+		//TODO render arg user email
+		render(relatedArticles);
 	}
 
 }

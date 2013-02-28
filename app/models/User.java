@@ -40,9 +40,15 @@ public class User extends Model {
 		this.keyArticles = new ArrayList<KeyArticle>();
 	}
 
-	public void addRelatedArticle(int pmid, int similarity) {
-		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity);
+	public void addRelatedArticle(int pmid, int similarity, double highestScore) {
+		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity, highestScore);
 		this.relatedArticles.add(newRelatedArticle);
+		this.save();
+	}
+
+	public void removeRelatedArticle(RelatedArticle relatedArticle){
+		this.relatedArticles.remove(relatedArticle);
+		relatedArticle.delete();
 		this.save();
 	}
 
@@ -69,23 +75,69 @@ public class User extends Model {
 
 	public void updateRelatedArticles() {
 
-		this.addKeyArticle(23273493);
-
 		for (KeyArticle keyArticle : this.keyArticles) {
 			System.out.println("Getting related articles: " + keyArticle.pmid);
 			HttpResponse res = WS.url("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?" +
 					"dbfrom=pubmed&db=pubmed&id="+keyArticle.pmid+"&cmd=neighbor_score").get();
 			int status = res.getStatus();
-			//TODO faire les XPATH ici
+			//TODO If bad status then go back to home page + error message
+
 			System.out.println("status: " + status);
 			Document xml = res.getXml();
-			for(Node event: XPath.selectNodes("LinkSet//LinkSetDb[0]/Link", xml)) {
-				String name = XPath.selectText("name", event);
-				String data = XPath.selectText("@date", event);
+			List<String> newRelatedArticlesIds = new ArrayList<String>();
+			List<String> newRelatedArticlesScores = new ArrayList<String>();
 
+			for(Node articles: XPath.selectNodes("//LinkSetDb[1]/Link", xml)) {
+				String id = XPath.selectText("Id", articles);
+				
+				//TODO do the pooling here
+				newRelatedArticlesIds.add(id);
+				String similarity = XPath.selectText("Score", articles);
+				//TODO do the pooling here
+				newRelatedArticlesScores.add(similarity);
 			}
+
+			removeOldRelatedArticles(newRelatedArticlesIds);
+			addAndUpdateRelatedArticles(newRelatedArticlesIds, newRelatedArticlesScores);
 		}
 
+	}
+
+	private void addAndUpdateRelatedArticles(List<String> newRelatedArticlesIds, List<String> newRelatedArticlesScores) {
+		
+		//TODO more complicated than that. The pooling - sorting has to happen before.
+		double	highestScore = Integer.parseInt(newRelatedArticlesScores.get(0));
+
+		for (int i = 0; i < newRelatedArticlesIds.size(); i++) {
+			
+			String newRelatedArticleId = newRelatedArticlesIds.get(i);
+			String newRelatedArticleScore = newRelatedArticlesScores.get(i);
+			
+			RelatedArticle oldRelatedArticle = getOldRelatedArticle(newRelatedArticleId);
+			if(oldRelatedArticle == null){
+				this.addRelatedArticle(Integer.parseInt(newRelatedArticleId), Integer.parseInt(newRelatedArticleScore), highestScore);
+			}else{
+				oldRelatedArticle.update(Integer.parseInt(newRelatedArticleScore), highestScore);
+			}
+		}
+	}
+
+	private RelatedArticle getOldRelatedArticle(String newRelatedArticleId) {
+		int id = Integer.parseInt(newRelatedArticleId);
+		for (RelatedArticle relatedArticle : this.relatedArticles) {
+			if(relatedArticle.pmid == id){
+				return relatedArticle;
+			}
+		}
+		return null;
+	}
+
+	private void removeOldRelatedArticles(List<String> newRelatedArticlesIds) {
+		for (RelatedArticle oldRelatedArticle : this.relatedArticles) {
+			if(!newRelatedArticlesIds.contains(Integer.toString(oldRelatedArticle.pmid))){
+				this.removeRelatedArticle(oldRelatedArticle);
+			}
+		}
 	}
 
 }
