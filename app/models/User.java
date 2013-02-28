@@ -49,13 +49,14 @@ public class User extends Model {
 	}
 
 	public void addRelatedArticle(int pmid, double similarity, double highestScore) {
-		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity, highestScore);
+		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity, highestScore).save();
 		this.relatedArticles.add(newRelatedArticle);
 		this.save();
 	}
 
 	public void removeRelatedArticle(long relatedArticleId){
 		RelatedArticle relatedArticleToDelete = RelatedArticle.findById(id);
+		System.out.println("Fetch article to delete: " + relatedArticleToDelete.pmid);
 		this.relatedArticles.remove(relatedArticleToDelete);
 		relatedArticleToDelete.delete();
 		this.save();
@@ -70,7 +71,7 @@ public class User extends Model {
 	}
 
 	public void addKeyArticle(int pmid) {
-		KeyArticle newKeyArticle = new KeyArticle(this, pmid);
+		KeyArticle newKeyArticle = new KeyArticle(this, pmid).save();
 		this.keyArticles.add(newKeyArticle);
 		this.save();
 	}
@@ -88,6 +89,7 @@ public class User extends Model {
 		List<String> newRelatedArticlesIds = new ArrayList<String>();
 		HashMap<String, Double> newRelatedArticlesScores = new HashMap<String, Double>();
 		//Gets the list of related articles pmid and similarity scores via PubMed API
+		List<String> keyArticlesIds = getKeyArticlesIds();
 		for (KeyArticle keyArticle : this.keyArticles) {
 			System.out.println("Getting related articles: " + keyArticle.pmid);
 			//http://www.ncbi.nlm.nih.gov/books/NBK25499/ --> "cmd=neighbor (default)"
@@ -103,8 +105,6 @@ public class User extends Model {
 				String id = XPath.selectText("Id", articles);
 				double similarity = Double.parseDouble(XPath.selectText("Score", articles));
 
-				List<String> keyArticlesIds = getKeyArticlesIds();
-
 				if(!keyArticlesIds.contains(id)){
 					//Heuristic behind the articles ranking:
 					//if an article is present more than one time, similarity scores
@@ -116,6 +116,8 @@ public class User extends Model {
 						newRelatedArticlesIds.add(id);
 						newRelatedArticlesScores.put(id, similarity);
 					}
+				}else{
+					System.out.println("The article is the same as a key article: " + id);
 				}
 
 			}
@@ -133,7 +135,7 @@ public class User extends Model {
 		for (KeyArticle keyArticle : this.keyArticles) {
 			keyArticlesIds.add(Integer.toString(keyArticle.pmid));
 		}
-
+		System.out.println("Key articles Ids: " + keyArticlesIds);
 		return keyArticlesIds;
 	}
 
@@ -172,16 +174,18 @@ public class User extends Model {
 
 	//Checks all the old related articles and delete them if not present in the new set anymore.
 	private void removeOldRelatedArticles(List<String> newRelatedArticlesIds) {
-		List<RelatedArticle> toDelete = new ArrayList<RelatedArticle>();
+		List<Long> toDeleteIds = new ArrayList<Long>();
 		for (RelatedArticle oldRelatedArticle : this.relatedArticles) {
+
 			if(!newRelatedArticlesIds.contains(Integer.toString(oldRelatedArticle.pmid))){
 				System.out.println("Article to delete: " + oldRelatedArticle.pmid);
-				toDelete.add(oldRelatedArticle);
+				toDeleteIds.add(oldRelatedArticle.id);
 			}
 		}
 
-		for (RelatedArticle relatedArticleToDelete : toDelete) {
-			this.removeRelatedArticle(relatedArticleToDelete.id);
+		for (Long relatedArticleToDeleteId : toDeleteIds) {
+			System.out.println("Id to delete: " + relatedArticleToDeleteId);
+			this.removeRelatedArticle(relatedArticleToDeleteId);
 		}
 	}
 

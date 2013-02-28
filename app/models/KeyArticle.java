@@ -23,8 +23,7 @@ public class KeyArticle extends Model {
 
 	public String journal;
 
-	@ElementCollection
-	public List<String> authors;
+	public String authors;
 
 	@ManyToOne
 	public User user;
