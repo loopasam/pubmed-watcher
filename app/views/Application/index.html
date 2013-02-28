@@ -4,6 +4,7 @@
 <h1>Logged in</h1>
 <a href="/logout">Logout</a>
 <p>${email}</p>
+<p>Total: ${relatedArticles.size()}</p>
 #{list items:keyArticles, as:'keyArticle'}
 #{keyArticle keyArticle /}
 #{/list}

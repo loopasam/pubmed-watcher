@@ -46,17 +46,20 @@ public class User extends Model {
 		this.relatedArticles = new ArrayList<RelatedArticle>();
 		this.readArticlePmids = new ArrayList<Integer>();
 		this.keyArticles = new ArrayList<KeyArticle>();
+		this.save();
 	}
 
 	public void addRelatedArticle(int pmid, double similarity, double highestScore) {
-		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity, highestScore).save();
+		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity, highestScore);
 		this.relatedArticles.add(newRelatedArticle);
+		newRelatedArticle.save();
 		this.save();
 	}
 
 	public void removeRelatedArticle(long relatedArticleId){
-		RelatedArticle relatedArticleToDelete = RelatedArticle.findById(id);
-		System.out.println("Fetch article to delete: " + relatedArticleToDelete.pmid);
+		System.out.println("Deleting related article with Id: " + relatedArticleId);
+		RelatedArticle relatedArticleToDelete = RelatedArticle.findById(relatedArticleId);
+		System.out.println("re-test after: " + relatedArticleToDelete.pmid);
 		this.relatedArticles.remove(relatedArticleToDelete);
 		relatedArticleToDelete.delete();
 		this.save();
@@ -71,12 +74,13 @@ public class User extends Model {
 	}
 
 	public void addKeyArticle(int pmid) {
-		KeyArticle newKeyArticle = new KeyArticle(this, pmid).save();
+		KeyArticle newKeyArticle = new KeyArticle(this, pmid);
 		this.keyArticles.add(newKeyArticle);
+		newKeyArticle.save();
 		this.save();
 	}
 
-	public void removeKeyArticle(Long id){
+	public void removeKeyArticle(long id){
 		KeyArticle keyArticleToDetach = KeyArticle.findById(id);
 		this.keyArticles.remove(keyArticleToDetach);
 		keyArticleToDetach.delete();
@@ -101,6 +105,7 @@ public class User extends Model {
 
 			Document xml = res.getXml();
 			//Iterates over the XML results and get pmids and scores out
+			System.out.println("number of nodes: " + XPath.selectNodes("//LinkSetDb[1]/Link", xml).size());
 			for(Node articles: XPath.selectNodes("//LinkSetDb[1]/Link", xml)) {
 				String id = XPath.selectText("Id", articles);
 				double similarity = Double.parseDouble(XPath.selectText("Score", articles));
@@ -116,16 +121,19 @@ public class User extends Model {
 						newRelatedArticlesIds.add(id);
 						newRelatedArticlesScores.put(id, similarity);
 					}
-				}else{
-					System.out.println("The article is the same as a key article: " + id);
 				}
 
 			}
 
 		}
-		removeOldRelatedArticles(newRelatedArticlesIds);
 
-		addAndUpdateRelatedArticles(newRelatedArticlesIds, MapUtil.sortByValue(newRelatedArticlesScores));
+		removeOldRelatedArticles(newRelatedArticlesIds);
+		
+		System.out.println("new related articles ID size: " + newRelatedArticlesIds.size());
+
+		if(newRelatedArticlesIds.size() > 0){
+			addAndUpdateRelatedArticles(newRelatedArticlesIds, MapUtil.sortByValue(newRelatedArticlesScores));
+		}
 
 	}
 
@@ -135,13 +143,12 @@ public class User extends Model {
 		for (KeyArticle keyArticle : this.keyArticles) {
 			keyArticlesIds.add(Integer.toString(keyArticle.pmid));
 		}
-		System.out.println("Key articles Ids: " + keyArticlesIds);
 		return keyArticlesIds;
 	}
 
 	private void addAndUpdateRelatedArticles(List<String> newRelatedArticlesIds, Map<String, Double> newRelatedArticlesScores) {
 
-		String	highestScorePmid =  newRelatedArticlesScores.keySet().iterator().next();
+		String highestScorePmid =  newRelatedArticlesScores.keySet().iterator().next();
 		double highestScore = newRelatedArticlesScores.get(highestScorePmid);
 		System.out.println("highest score: " + highestScore + " - " + highestScorePmid);
 
@@ -184,8 +191,8 @@ public class User extends Model {
 		}
 
 		for (Long relatedArticleToDeleteId : toDeleteIds) {
-			System.out.println("Id to delete: " + relatedArticleToDeleteId);
-			this.removeRelatedArticle(relatedArticleToDeleteId);
+			removeRelatedArticle(relatedArticleToDeleteId);
+			
 		}
 	}
 

@@ -38,7 +38,7 @@ public class Application extends Controller {
 		renderArgs.put("email", user.email);
 		List<KeyArticle> keyArticles = user.keyArticles;
 		List<RelatedArticle> relatedArticles = RelatedArticle.find("user=? order by standardizedSimilarity desc", user).fetch(1000);
-		
+
 		render(relatedArticles, keyArticles);
 	}
 
@@ -76,10 +76,10 @@ public class Application extends Controller {
 			List<Node> authors = XPath.selectNodes("//DocSum/Item[@Name='AuthorList']", article);
 			newKeyArticle.authors = XPath.selectText("Item[1]", authors);
 			connected().keyArticles.add(newKeyArticle);
-			connected().save();
 			newKeyArticle.save();
+			connected().save();
 			System.out.println("new article added to the existing ones");
-		}
+		} 
 
 		session.put("updated", "false");
 		index();
