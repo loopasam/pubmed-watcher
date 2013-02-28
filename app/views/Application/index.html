@@ -4,7 +4,19 @@
 <h1>Logged in</h1>
 <a href="/logout">Logout</a>
 <p>${email}</p>
-<p>Key articles goes here</p>
+#{list items:keyArticles, as:'keyArticle'}
+#{keyArticle keyArticle /}
+#{/list}
+
+%{
+  for(int i = keyArticles.size(); i < 4; i++) { 
+}%
+  #{GhostKeyArticle /}
+%{
+  }
+}%
+
+
 #{list items:relatedArticles, as:'relatedArticle'}
-<p>${relatedArticle.pmid} - ${relatedArticle.standardizedSimilarity} - ${relatedArticle.similarity}</p>
+<p>${relatedArticle.pmid} - ${relatedArticle.standardizedSimilarity}</p>
 #{/list}

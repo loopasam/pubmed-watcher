@@ -13,6 +13,10 @@ GET     /login                                       Security.login
 # Feed
 GET     /feed/                                       Application.index
 
+# Key article interaction
+GET     /add/                                       Application.addKeyArticle
+POST     /new/{pmid}                                       Application.addnewKeyArticle
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

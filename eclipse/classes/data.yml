@@ -5,7 +5,15 @@ User(sam):
     
 User(jeff):
     email:          jeff@gmail.com
-    
+
 KeyArticle(firstKeyArticle):
-    pmid:          23273493
+    pmid:          22711793
+    user:          sam
+
+KeyArticle(secondKeyArticle):
+    pmid:          21343142
+    user:          sam
+    
+RelatedArticle(firstRelatedArticle):
+    pmid:          23444511
     user:          sam

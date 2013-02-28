@@ -19,7 +19,7 @@ public class KeyArticle extends Model {
 
 	public String title;
 
-	public Date date;
+	public String date;
 
 	public String journal;
 

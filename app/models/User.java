@@ -1,7 +1,14 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
@@ -18,6 +25,7 @@ import play.db.jpa.Model;
 import play.libs.WS;
 import play.libs.WS.HttpResponse;
 import play.libs.XPath;
+import utils.MapUtil;
 
 @Entity
 public class User extends Model {
@@ -40,15 +48,16 @@ public class User extends Model {
 		this.keyArticles = new ArrayList<KeyArticle>();
 	}
 
-	public void addRelatedArticle(int pmid, int similarity, double highestScore) {
+	public void addRelatedArticle(int pmid, double similarity, double highestScore) {
 		RelatedArticle newRelatedArticle = new RelatedArticle(this, pmid, similarity, highestScore);
 		this.relatedArticles.add(newRelatedArticle);
 		this.save();
 	}
 
-	public void removeRelatedArticle(RelatedArticle relatedArticle){
-		this.relatedArticles.remove(relatedArticle);
-		relatedArticle.delete();
+	public void removeRelatedArticle(long relatedArticleId){
+		RelatedArticle relatedArticleToDelete = RelatedArticle.findById(id);
+		this.relatedArticles.remove(relatedArticleToDelete);
+		relatedArticleToDelete.delete();
 		this.save();
 	}
 
@@ -73,51 +82,80 @@ public class User extends Model {
 		this.save();
 	}
 
+	//Updates the relates articles
 	public void updateRelatedArticles() {
 
+		List<String> newRelatedArticlesIds = new ArrayList<String>();
+		HashMap<String, Double> newRelatedArticlesScores = new HashMap<String, Double>();
+		//Gets the list of related articles pmid and similarity scores via PubMed API
 		for (KeyArticle keyArticle : this.keyArticles) {
 			System.out.println("Getting related articles: " + keyArticle.pmid);
+			//http://www.ncbi.nlm.nih.gov/books/NBK25499/ --> "cmd=neighbor (default)"
 			HttpResponse res = WS.url("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?" +
 					"dbfrom=pubmed&db=pubmed&id="+keyArticle.pmid+"&cmd=neighbor_score").get();
 			int status = res.getStatus();
 			//TODO If bad status then go back to home page + error message
-
 			System.out.println("status: " + status);
-			Document xml = res.getXml();
-			List<String> newRelatedArticlesIds = new ArrayList<String>();
-			List<String> newRelatedArticlesScores = new ArrayList<String>();
 
+			Document xml = res.getXml();
+			//Iterates over the XML results and get pmids and scores out
 			for(Node articles: XPath.selectNodes("//LinkSetDb[1]/Link", xml)) {
 				String id = XPath.selectText("Id", articles);
-				
-				//TODO do the pooling here
-				newRelatedArticlesIds.add(id);
-				String similarity = XPath.selectText("Score", articles);
-				//TODO do the pooling here
-				newRelatedArticlesScores.add(similarity);
+				double similarity = Double.parseDouble(XPath.selectText("Score", articles));
+
+				List<String> keyArticlesIds = getKeyArticlesIds();
+
+				if(!keyArticlesIds.contains(id)){
+					//Heuristic behind the articles ranking:
+					//if an article is present more than one time, similarity scores
+					//are added.
+					if(newRelatedArticlesIds.contains(id)){
+						double oldScore = newRelatedArticlesScores.get(id);
+						newRelatedArticlesScores.put(id, oldScore + similarity);
+					}else{
+						newRelatedArticlesIds.add(id);
+						newRelatedArticlesScores.put(id, similarity);
+					}
+				}
+
 			}
 
-			removeOldRelatedArticles(newRelatedArticlesIds);
-			addAndUpdateRelatedArticles(newRelatedArticlesIds, newRelatedArticlesScores);
 		}
+		removeOldRelatedArticles(newRelatedArticlesIds);
+
+		addAndUpdateRelatedArticles(newRelatedArticlesIds, MapUtil.sortByValue(newRelatedArticlesScores));
 
 	}
 
-	private void addAndUpdateRelatedArticles(List<String> newRelatedArticlesIds, List<String> newRelatedArticlesScores) {
-		
-		//TODO more complicated than that. The pooling - sorting has to happen before.
-		double	highestScore = Integer.parseInt(newRelatedArticlesScores.get(0));
 
-		for (int i = 0; i < newRelatedArticlesIds.size(); i++) {
-			
-			String newRelatedArticleId = newRelatedArticlesIds.get(i);
-			String newRelatedArticleScore = newRelatedArticlesScores.get(i);
-			
+	private List<String> getKeyArticlesIds() {
+		List<String> keyArticlesIds = new ArrayList<String>();
+		for (KeyArticle keyArticle : this.keyArticles) {
+			keyArticlesIds.add(Integer.toString(keyArticle.pmid));
+		}
+
+		return keyArticlesIds;
+	}
+
+	private void addAndUpdateRelatedArticles(List<String> newRelatedArticlesIds, Map<String, Double> newRelatedArticlesScores) {
+
+		String	highestScorePmid =  newRelatedArticlesScores.keySet().iterator().next();
+		double highestScore = newRelatedArticlesScores.get(highestScorePmid);
+		System.out.println("highest score: " + highestScore + " - " + highestScorePmid);
+
+		for (String newRelatedArticleId : newRelatedArticlesIds) {
+
+			double newRelatedArticleScore = newRelatedArticlesScores.get(newRelatedArticleId);
+
+			//Try to get the corresponding related article previously saved
 			RelatedArticle oldRelatedArticle = getOldRelatedArticle(newRelatedArticleId);
+			//If the result is null, it means that the article wasn't previously known
 			if(oldRelatedArticle == null){
-				this.addRelatedArticle(Integer.parseInt(newRelatedArticleId), Integer.parseInt(newRelatedArticleScore), highestScore);
+				//The article is then added to the database
+				this.addRelatedArticle(Integer.parseInt(newRelatedArticleId), newRelatedArticleScore, highestScore);
 			}else{
-				oldRelatedArticle.update(Integer.parseInt(newRelatedArticleScore), highestScore);
+				//The article content is updated with the freshest values
+				oldRelatedArticle.update(newRelatedArticleScore, highestScore);
 			}
 		}
 	}
@@ -132,11 +170,18 @@ public class User extends Model {
 		return null;
 	}
 
+	//Checks all the old related articles and delete them if not present in the new set anymore.
 	private void removeOldRelatedArticles(List<String> newRelatedArticlesIds) {
+		List<RelatedArticle> toDelete = new ArrayList<RelatedArticle>();
 		for (RelatedArticle oldRelatedArticle : this.relatedArticles) {
 			if(!newRelatedArticlesIds.contains(Integer.toString(oldRelatedArticle.pmid))){
-				this.removeRelatedArticle(oldRelatedArticle);
+				System.out.println("Article to delete: " + oldRelatedArticle.pmid);
+				toDelete.add(oldRelatedArticle);
 			}
+		}
+
+		for (RelatedArticle relatedArticleToDelete : toDelete) {
+			this.removeRelatedArticle(relatedArticleToDelete.id);
 		}
 	}
 

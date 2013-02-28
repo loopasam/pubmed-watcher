@@ -13,32 +13,26 @@ public class RelatedArticle extends Model {
 
 	public int pmid;
 
-	public int similarity;
-
 	public double standardizedSimilarity;
 
 	@ManyToOne
 	public User user;
 
-	public RelatedArticle(User user, int pmid, int similarity, double highestScore){
+	public RelatedArticle(User user, int pmid, double similarity, double highestScore){
 		this.user = user;
 		this.pmid = pmid;
-		this.similarity = similarity;
-		this.standardizedSimilarity = similarity * 100.0 / highestScore;
+		this.standardizedSimilarity = getStandardizedScore(similarity, highestScore);
 	}
 
-	public void update(int newSimilarity, double highestScore) {
-		
-		//TODO actually maybe no needs to check the score + round score
+	private double getStandardizedScore(double similarity, double highestScore) {
+		return Math.round(similarity * 100.0 / highestScore);
+	}
+
+	public void update(double newSimilarity, double highestScore) {
 
 		boolean modified = false;
-		
-		double newStandardizedSimilarity = newSimilarity * 100.0 / highestScore;
 
-		if(newSimilarity != this.similarity){
-			this.similarity = newSimilarity;
-			modified = true;
-		}
+		double newStandardizedSimilarity = getStandardizedScore(newSimilarity, highestScore);
 
 		if(newStandardizedSimilarity != this.standardizedSimilarity){
 			this.standardizedSimilarity = newStandardizedSimilarity;
