@@ -17,6 +17,8 @@ import models.*;
 @With(Security.class)
 public class Application extends Controller {
 
+	public static final int PAGINATION = 10;
+
 	static User connected() {
 		String email = session.get("email");
 		if(email != null) {
@@ -34,9 +36,19 @@ public class Application extends Controller {
 		}
 		renderArgs.put("email", user.email);
 		List<KeyArticle> keyArticles = user.keyArticles;
-		List<RelatedArticle> relatedArticles = RelatedArticle.find("user=? order by standardizedSimilarity desc", user).fetch(10);
+		List<RelatedArticle> relatedArticles = RelatedArticle.find("user=? order by standardizedSimilarity desc", user).fetch(PAGINATION);
 
-		render(relatedArticles, keyArticles);
+		String pmids = "";
+		boolean isFirst = true;
+		for (RelatedArticle relatedArticle : relatedArticles) {
+			if(isFirst){
+				isFirst = false;
+				pmids = Integer.toString(relatedArticle.pmid);
+			}else{
+				pmids += "," + relatedArticle.pmid;
+			}
+		}
+		render(relatedArticles, keyArticles, pmids);
 	}
 
 	public static void addKeyArticle() {
@@ -48,21 +60,28 @@ public class Application extends Controller {
 		session.put("updated", "false");
 		index();
 	}
-	
+
 	public static void markAsRead(long id) {
 		connected().markAsRead(id);
 		index();
 	}
-	
+
 	public static void unMarkAsRead(int pmid) {
 		connected().unMarkAsRead(pmid);
 		session.put("updated", "false");
 		index();
 	}
-	
+
 	public static void read(){
 		List<Integer> readArticlePmids = connected().readArticlePmids;
 		render(readArticlePmids);
+	}
+
+	public static void moreRelatedArticles(int pagination){
+		User user = connected();
+		List<RelatedArticle> relatedArticles = 
+				RelatedArticle.find("user=? order by standardizedSimilarity desc", user).from(pagination).fetch(PAGINATION);		
+		render("Application/relatedArticles.json", relatedArticles);
 	}
 
 	public static void addnewKeyArticle(int pmid) {

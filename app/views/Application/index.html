@@ -1,8 +1,9 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
+#{script 'pubmed-loader.js' /}
 
-<h1>Logged in</h1>
 <a href="/logout">Logout</a>
+<a href=@{Application.read()}>read articles</a>
 <p>${email}</p>
 <p>Total: ${relatedArticles.size()}</p>
 #{list items:keyArticles, as:'keyArticle'}
@@ -17,8 +18,18 @@
   }
 }%
 
-//TODO special tag for related articles
+<div id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}
-<p>${relatedArticle.pmid} - ${relatedArticle.standardizedSimilarity} - 
-<a href="@{Application.markAsRead(relatedArticle.id)}" class="btn">mark as read</a></p>
+<div id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}">
+</div>
+<hr>
 #{/list}
+</div>
+
+<button id="showMore" class="btn" data-pagination="${relatedArticles.size()}" type="button">Show More</button>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	loadDocuments('${pmids}');
+});
+</script>

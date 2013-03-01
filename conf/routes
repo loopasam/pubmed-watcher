@@ -13,13 +13,14 @@ GET     /login                                       Security.login
 # Feed
 GET     /feed/                                       Application.index
 
-# Key article interaction
+# Article interaction
 GET     /add/                                       Application.addKeyArticle
 POST     /new/{pmid}                                       Application.addnewKeyArticle
 GET     /remove/{id}                                       Application.removeKeyArticle
 GET     /markAsRead/{id}                                       Application.markAsRead
 GET     /read/                                       Application.read
 GET     /unMarkAsRead/{pmid}                                       Application.unMarkAsRead
+GET     /moreRelatedArticles/{pagination}                                       Application.moreRelatedArticles
 
 
 # Ignore favicon requests

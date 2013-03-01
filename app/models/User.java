@@ -101,9 +101,7 @@ public class User extends Model {
 		HashMap<String, Double> newRelatedArticlesScores = new HashMap<String, Double>();
 		//Gets the list of related articles pmid and similarity scores via PubMed API
 		List<String> keyArticlesIds = getKeyArticlesIds();
-		System.out.println("read articles: " + this.readArticlePmids);
 		for (KeyArticle keyArticle : this.keyArticles) {
-			System.out.println("Getting related articles: " + keyArticle.pmid);
 			//http://www.ncbi.nlm.nih.gov/books/NBK25499/ --> "cmd=neighbor (default)"
 			HttpResponse res = WS.url("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?" +
 					"dbfrom=pubmed&db=pubmed&id="+keyArticle.pmid+"&cmd=neighbor_score").get();
@@ -113,14 +111,9 @@ public class User extends Model {
 
 			Document xml = res.getXml();
 			//Iterates over the XML results and get pmids and scores out
-			System.out.println("number of nodes: " + XPath.selectNodes("//LinkSetDb[1]/Link", xml).size());
 			for(Node articles: XPath.selectNodes("//LinkSetDb[1]/Link", xml)) {
 				String id = XPath.selectText("Id", articles);
 				double similarity = Double.parseDouble(XPath.selectText("Score", articles));
-
-				if(this.readArticlePmids.contains(id)){
-					System.out.println("---same id spotted: " + id);
-				}
 
 				if(!keyArticlesIds.contains(id) && !this.readArticlePmids.contains(Integer.parseInt(id))){
 					//Heuristic behind the articles ranking:
@@ -141,8 +134,6 @@ public class User extends Model {
 
 		removeOldRelatedArticles(newRelatedArticlesIds);
 
-		System.out.println("new related articles ID size: " + newRelatedArticlesIds.size());
-
 		if(newRelatedArticlesIds.size() > 0){
 			addAndUpdateRelatedArticles(newRelatedArticlesIds, MapUtil.sortByValue(newRelatedArticlesScores));
 		}
@@ -162,7 +153,6 @@ public class User extends Model {
 
 		String highestScorePmid =  newRelatedArticlesScores.keySet().iterator().next();
 		double highestScore = newRelatedArticlesScores.get(highestScorePmid);
-		System.out.println("highest score: " + highestScore + " - " + highestScorePmid);
 
 		for (String newRelatedArticleId : newRelatedArticlesIds) {
 
@@ -197,7 +187,6 @@ public class User extends Model {
 		for (RelatedArticle oldRelatedArticle : this.relatedArticles) {
 
 			if(!newRelatedArticlesIds.contains(Integer.toString(oldRelatedArticle.pmid))){
-				System.out.println("Article to delete: " + oldRelatedArticle.pmid);
 				toDeleteIds.add(oldRelatedArticle.id);
 			}
 		}

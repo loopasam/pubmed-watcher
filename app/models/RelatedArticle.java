@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.Model;
 
 @Entity
