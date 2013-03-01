@@ -1,0 +1,7 @@
+[
+#{list readArticlePmids}
+  {
+      "pmid": "${_}"
+  } #{if !_isLast},#{/if}
+#{/list}
+]

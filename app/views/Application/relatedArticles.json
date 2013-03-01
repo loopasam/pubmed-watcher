@@ -1,0 +1,9 @@
+[
+#{list relatedArticles}
+  {
+      "pmid": "${_.pmid}",
+      "id": "${_.id}",
+      "score": "${_.standardizedSimilarity}"
+  } #{if !_isLast},#{/if}
+#{/list}
+]

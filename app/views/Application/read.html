@@ -1,0 +1,22 @@
+#{extends 'main.html' /}
+#{set title:'Read articles' /}
+#{script 'pubmed-loader.js' /}
+
+//TODO if size == zero --> message
+
+<div id="read-articles">
+#{list items:readArticlePmids, as:'readArticlePmid'}
+<div style="display: none;" id="${readArticlePmid}">
+<a href="@{Application.unMarkAsRead(readArticlePmid)}" class="btn">unmark as read</a>
+</div>
+<hr>
+#{/list}
+</div>
+
+<button id="showMoreReadArticles" class="btn" data-pagination="${readArticlePmids.size()}" type="button">Show More</button>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	loadDocuments('${pmids}');
+});
+</script>

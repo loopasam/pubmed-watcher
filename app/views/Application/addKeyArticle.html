@@ -1,0 +1,19 @@
+#{ifErrors}
+ 
+   <h1>Oops…</h1>
+ 
+   #{errors}
+       <li>${error}</li>
+   #{/errors}
+ 
+#{/ifErrors}
+//TODO shows ajax loader onClick button
+#{form @Application.addnewKeyArticle()}
+  <fieldset>
+    <legend>Legend</legend>
+    <label>Label name</label>
+    <input name="pmid" type="text" placeholder="Enter a valid PMID…">
+    <span class="help-block">Where to find the PMID?</span>
+    <button type="submit" class="btn">Submit</button>
+  </fieldset>
+#{/form}
