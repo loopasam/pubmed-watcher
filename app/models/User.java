@@ -57,19 +57,26 @@ public class User extends Model {
 	}
 
 	public void removeRelatedArticle(long relatedArticleId){
-		System.out.println("Deleting related article with Id: " + relatedArticleId);
 		RelatedArticle relatedArticleToDelete = RelatedArticle.findById(relatedArticleId);
-		System.out.println("re-test after: " + relatedArticleToDelete.pmid);
 		this.relatedArticles.remove(relatedArticleToDelete);
 		relatedArticleToDelete.delete();
 		this.save();
 	}
 
-	public void markAsRead(Long id){
+	public void markAsRead(long id){
 		RelatedArticle relatedArticleToDelete = RelatedArticle.findById(id);
 		this.readArticlePmids.add(relatedArticleToDelete.pmid);
 		this.relatedArticles.remove(relatedArticleToDelete);
 		relatedArticleToDelete.delete();
+		this.save();
+	}
+
+	public void unMarkAsRead(int pmid){
+		for (int i = 0; i < this.readArticlePmids.size(); i++) {
+			if(this.readArticlePmids.get(i) == pmid){
+				this.readArticlePmids.remove(i);
+			}
+		}
 		this.save();
 	}
 
@@ -94,6 +101,7 @@ public class User extends Model {
 		HashMap<String, Double> newRelatedArticlesScores = new HashMap<String, Double>();
 		//Gets the list of related articles pmid and similarity scores via PubMed API
 		List<String> keyArticlesIds = getKeyArticlesIds();
+		System.out.println("read articles: " + this.readArticlePmids);
 		for (KeyArticle keyArticle : this.keyArticles) {
 			System.out.println("Getting related articles: " + keyArticle.pmid);
 			//http://www.ncbi.nlm.nih.gov/books/NBK25499/ --> "cmd=neighbor (default)"
@@ -110,7 +118,11 @@ public class User extends Model {
 				String id = XPath.selectText("Id", articles);
 				double similarity = Double.parseDouble(XPath.selectText("Score", articles));
 
-				if(!keyArticlesIds.contains(id)){
+				if(this.readArticlePmids.contains(id)){
+					System.out.println("---same id spotted: " + id);
+				}
+
+				if(!keyArticlesIds.contains(id) && !this.readArticlePmids.contains(Integer.parseInt(id))){
 					//Heuristic behind the articles ranking:
 					//if an article is present more than one time, similarity scores
 					//are added.
@@ -121,14 +133,14 @@ public class User extends Model {
 						newRelatedArticlesIds.add(id);
 						newRelatedArticlesScores.put(id, similarity);
 					}
+				}else{
+					System.out.println("Article not considered as related article: " + id);
 				}
-
 			}
-
 		}
 
 		removeOldRelatedArticles(newRelatedArticlesIds);
-		
+
 		System.out.println("new related articles ID size: " + newRelatedArticlesIds.size());
 
 		if(newRelatedArticlesIds.size() > 0){
@@ -192,7 +204,7 @@ public class User extends Model {
 
 		for (Long relatedArticleToDeleteId : toDeleteIds) {
 			removeRelatedArticle(relatedArticleToDeleteId);
-			
+
 		}
 	}
 

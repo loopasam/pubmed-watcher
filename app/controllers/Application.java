@@ -29,21 +29,40 @@ public class Application extends Controller {
 		User user = connected();
 		String updated = session.get("updated");
 		if(updated == null || updated.equals("false")){
-			System.out.println("not updated yet...");
 			user.updateRelatedArticles();
 			session.put("updated", "true");
-		}else{
-			System.out.println("already updated");
 		}
 		renderArgs.put("email", user.email);
 		List<KeyArticle> keyArticles = user.keyArticles;
-		List<RelatedArticle> relatedArticles = RelatedArticle.find("user=? order by standardizedSimilarity desc", user).fetch(1000);
+		List<RelatedArticle> relatedArticles = RelatedArticle.find("user=? order by standardizedSimilarity desc", user).fetch(10);
 
 		render(relatedArticles, keyArticles);
 	}
 
 	public static void addKeyArticle() {
 		render();
+	}
+
+	public static void removeKeyArticle(long id) {
+		connected().removeKeyArticle(id);
+		session.put("updated", "false");
+		index();
+	}
+	
+	public static void markAsRead(long id) {
+		connected().markAsRead(id);
+		index();
+	}
+	
+	public static void unMarkAsRead(int pmid) {
+		connected().unMarkAsRead(pmid);
+		session.put("updated", "false");
+		index();
+	}
+	
+	public static void read(){
+		List<Integer> readArticlePmids = connected().readArticlePmids;
+		render(readArticlePmids);
 	}
 
 	public static void addnewKeyArticle(int pmid) {

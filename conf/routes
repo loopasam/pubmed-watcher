@@ -16,6 +16,11 @@ GET     /feed/                                       Application.index
 # Key article interaction
 GET     /add/                                       Application.addKeyArticle
 POST     /new/{pmid}                                       Application.addnewKeyArticle
+GET     /remove/{id}                                       Application.removeKeyArticle
+GET     /markAsRead/{id}                                       Application.markAsRead
+GET     /read/                                       Application.read
+GET     /unMarkAsRead/{pmid}                                       Application.unMarkAsRead
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
