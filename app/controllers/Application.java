@@ -72,9 +72,20 @@ public class Application extends Controller {
 		index();
 	}
 
+	//TODO only get the first X ones + pagination
 	public static void read(){
 		List<Integer> readArticlePmids = connected().readArticlePmids;
-		render(readArticlePmids);
+		String pmids = "";
+		boolean isFirst = true;
+		for (Integer relatedArticlePmid : connected().readArticlePmids) {
+			if(isFirst){
+				isFirst = false;
+				pmids = Integer.toString(relatedArticlePmid);
+			}else{
+				pmids += "," + relatedArticlePmid;
+			}
+		}
+		render(readArticlePmids, pmids);
 	}
 
 	public static void moreRelatedArticles(int pagination){
