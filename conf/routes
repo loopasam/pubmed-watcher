@@ -21,6 +21,7 @@ GET     /markAsRead/{id}                                       Application.markA
 GET     /read/                                       Application.read
 GET     /unMarkAsRead/{pmid}                                       Application.unMarkAsRead
 GET     /moreRelatedArticles/{pagination}                                       Application.moreRelatedArticles
+GET     /moreReadArticles/{pagination}                                       Application.moreReadArticles
 
 
 # Ignore favicon requests

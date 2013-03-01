@@ -72,9 +72,15 @@ public class Application extends Controller {
 		index();
 	}
 
-	//TODO only get the first X ones + pagination
 	public static void read(){
-		List<Integer> readArticlePmids = connected().readArticlePmids;
+
+		int pagination = 10;
+
+		if(connected().readArticlePmids.size() < pagination){
+			pagination = connected().readArticlePmids.size();
+		}
+
+		List<Integer> readArticlePmids = connected().readArticlePmids.subList(0, pagination);
 		String pmids = "";
 		boolean isFirst = true;
 		for (Integer relatedArticlePmid : connected().readArticlePmids) {
@@ -87,6 +93,22 @@ public class Application extends Controller {
 		}
 		render(readArticlePmids, pmids);
 	}
+
+	public static void moreReadArticles(int pagination){
+		
+		int oldPagination = pagination;
+		
+		if(connected().readArticlePmids.size() < 10 + pagination){
+			pagination = connected().readArticlePmids.size();
+		}else{
+			pagination = 10 + pagination;
+		}
+
+		List<Integer> readArticlePmids = connected().readArticlePmids.subList(oldPagination, pagination);
+					
+		render("Application/readArticles.json", readArticlePmids);
+	}
+
 
 	public static void moreRelatedArticles(int pagination){
 		User user = connected();
