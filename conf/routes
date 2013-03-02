@@ -4,6 +4,9 @@
 
 # Home page
 GET     /                                       Presentation.index
+GET     /about/                                       Presentation.about
+GET     /settings/                                       Application.settings
+
 
 # Secure module
 GET     /auth                                       Security.auth

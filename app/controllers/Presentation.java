@@ -9,7 +9,6 @@ import play.mvc.Http;
 public class Presentation extends Controller {
 
 	public static void index() {
-
 		Http.Cookie remember = request.cookies.get("pubmedwatcher");
 		if(remember != null) {
 			System.out.println("coockie is not null on home page");
@@ -23,5 +22,14 @@ public class Presentation extends Controller {
 
 		render();
 	}
+
+	public static void about() {
+		String email = null;
+		if(Application.connected() != null){
+			email = Application.connected().email;
+		}
+		render(email);
+	}
+
 
 }

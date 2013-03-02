@@ -1,10 +1,18 @@
 #{extends 'main.html' /}
 #{set title:'PubMed Watcher' /}
-#{menu /}
+
+#{menu 'home-link' /}
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('.pouet').popover();
+	$('.google-signin').popover();
+	$('.signin-text').show();
+	$('.loader').hide();
+	
+	$('.btn-success').click(function(){
+		$('.signin-text').hide();
+		$('.loader').show();
+	});
 });
 </script>
 
@@ -15,9 +23,10 @@ $(document).ready(function() {
 		<p class="lead">
 		Tailored biomedical literature feed. Define your research with up to 4 Key Articles. Read relevant text!
 		</p>
-		<a class="btn btn-large btn-success" href="@{Security.login()}">Sign in via Google >></a>
+		<a class="btn btn-large btn-success" href="@{Security.login()}"><span class="signin-text">Sign in via Google >></span>
+		<img class="loader" style="display: none;" src="@{'/public/images/ajax-loader.gif'}" /></a>
 		<p style="margin-top: 10px;">
-			<a href="#" class="pouet" data-toggle="popover" 
+			<a href="#" class="google-signin" data-toggle="popover" 
 			data-placement="bottom" 
 			data-content="PubMed Watcher relies on Google secure authentification. 
 			The application only uses your email address to keep
@@ -25,8 +34,6 @@ $(document).ready(function() {
 			title="" data-original-title="Sign in via Google?">What does it mean?</a>
 		</p>
 	</div>
-	<hr>
-	<div class="footer">
-		<p>EMBL-EBI | Samuel Croset</p>
-	</div>
+	
+	#{footer /}	
 </div>

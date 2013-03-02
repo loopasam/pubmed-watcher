@@ -54,7 +54,11 @@ public class Application extends Controller {
 	public static void addKeyArticle() {
 		render();
 	}
-
+	
+	public static void settings(){
+		render();
+	}
+	
 	public static void removeKeyArticle(long id) {
 		connected().removeKeyArticle(id);
 		session.put("updated", "false");
@@ -91,7 +95,8 @@ public class Application extends Controller {
 				pmids += "," + relatedArticlePmid;
 			}
 		}
-		render(readArticlePmids, pmids);
+		String email = connected().email;
+		render(readArticlePmids, pmids, email);
 	}
 
 	public static void moreReadArticles(int pagination){

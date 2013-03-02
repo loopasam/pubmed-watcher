@@ -44,7 +44,7 @@ function appendArticle(pmid, date, journal, title, authorList) {
 	article.append('<div>' + journal + '</div>');
 	var score = $('#' + pmid).attr('data-score');
 	if(score != NaN){
-		article.append('<div class="progress"><div class="bar" style="width: ' + score + '%;"></div></div>');
+		article.append('<div class="progress progress-striped"><div class="bar" style="width: ' + score + '%;"></div></div>');
 	}
 	$('#' + pmid).append(article);
 	$('#' + pmid).show();

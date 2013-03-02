@@ -1,11 +1,10 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title:'PubMed Watcher - Feed' /}
 #{script 'pubmed-loader.js' /}
 
-<a href="/logout">Logout</a>
-<a href=@{Application.read()}>read articles</a>
-<p>${email}</p>
-<p>Total: ${relatedArticles.size()}</p>
+#{set email:email /}
+#{menu 'home-link' /}
+
 #{list items:keyArticles, as:'keyArticle'}
 #{keyArticle keyArticle /}
 #{/list}
@@ -18,9 +17,9 @@
   }
 }%
 
-<div id="related-articles">
+<div class="container" id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}
-<div style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}">
+<div class="" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}">
 <a href="@{Application.markAsRead(relatedArticle.id)}" class="btn">mark as read</a>
 </div>
 <hr>

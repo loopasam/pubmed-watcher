@@ -6,13 +6,33 @@
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
             </button>
-			<a class="brand" href="#">PubMed Watcher</a>
+			<a class="brand" href="@{Presentation.index()}">PubMed Watcher</a>
 			<div class="nav-collapse collapse">
 			<ul class="nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#about">About</a></li>
-				<li><a href="#contact">Contact</a></li>
+				<li class="home-link"><a href="@{Presentation.index()}"><i class="icon-home"></i> home</a></li>
+				<li class="about-link"><a href="@{Presentation.about()}"><i class="icon-question-sign"></i> about</a></li>
+				<li class="read-link logged-info"><a href="@{Application.read()}"><i class="icon-eye-open"></i> read articles</a></li>
+				<li class="user-link logged-info dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						<i class="icon-user"></i> <span id="email">#{get 'email' /}</span><b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="@{Application.settings()}">settings</a></li>
+                    	<li><a href="@{Security.logout()}">logout</a></li>
+                  </ul>
+				</li>
 			</ul>
+			</div>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('ul .${_arg}').addClass("active");
+	var email = $('#email').html();
+	if(email == ""){
+		$('.logged-info').hide();
+	}
+});
+</script>

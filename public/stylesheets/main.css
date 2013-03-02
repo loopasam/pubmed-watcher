@@ -19,5 +19,6 @@
 }
 
 body {
-	background-image: url(http://subtlepatterns.com/patterns/tiny_grid.png);
+	padding-top: 60px;
+	background: repeat url('/public/images/tiny_grid.png');
 }
