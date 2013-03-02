@@ -1,5 +1,32 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title:'PubMed Watcher' /}
+#{menu /}
 
-<a href="/login">Login</a>
-<p>Hero layout</p>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.pouet').popover();
+});
+</script>
+
+
+<div class="container">
+	<div class="jumbotron">
+		<h1>PubMed Watcher</h1>
+		<p class="lead">
+		Tailored biomedical literature feed. Define your research with up to 4 Key Articles. Read relevant text!
+		</p>
+		<a class="btn btn-large btn-success" href="@{Security.login()}">Sign in via Google >></a>
+		<p style="margin-top: 10px;">
+			<a href="#" class="pouet" data-toggle="popover" 
+			data-placement="bottom" 
+			data-content="PubMed Watcher relies on Google secure authentification. 
+			The application only uses your email address to keep
+			track of your profile and doesn't have access to your password. You can delete your PubMed Watcher account any time :-)" 
+			title="" data-original-title="Sign in via Google?">What does it mean?</a>
+		</p>
+	</div>
+	<hr>
+	<div class="footer">
+		<p>EMBL-EBI | Samuel Croset</p>
+	</div>
+</div>

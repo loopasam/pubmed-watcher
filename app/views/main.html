@@ -4,13 +4,14 @@
         <title>#{get 'title' /}</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
+        <link rel="stylesheet" media="screen" href="@{'/public/bootstrap/css/bootstrap.min.css'}">
         #{get 'moreStyles' /}
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
+        <script src="@{'/public/bootstrap/js/bootstrap.min.js'}" type="text/javascript" charset="UTF-8"></script>
         #{get 'moreScripts' /}
     </head>
     <body>
-    <div>Menu</div>
         #{doLayout /}
     </body>
 </html>
