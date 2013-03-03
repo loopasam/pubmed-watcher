@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$('.signin-text').show();
 	$('.loader').hide();
 	
-	$('.btn-success').click(function(){
+	$('.btn-primary').click(function(){
 		$('.signin-text').hide();
 		$('.loader').show();
 	});
@@ -23,7 +23,7 @@ $(document).ready(function() {
 		<p class="lead">
 		Tailored biomedical literature feed. Define your research with up to 4 Key Articles. Read relevant text!
 		</p>
-		<a class="btn btn-large btn-success" href="@{Security.login()}"><span class="signin-text">Sign in via Google >></span>
+		<a class="btn btn-large btn-primary" href="@{Security.login()}"><span class="signin-text">Sign in via Google >></span>
 		<img class="loader" style="display: none;" src="@{'/public/images/ajax-loader.gif'}" /></a>
 		<p style="margin-top: 10px;">
 			<a href="#" class="google-signin" data-toggle="popover" 

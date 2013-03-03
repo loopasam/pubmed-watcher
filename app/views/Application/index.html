@@ -5,24 +5,56 @@
 #{set email:email /}
 #{menu 'home-link' /}
 
-#{list items:keyArticles, as:'keyArticle'}
-#{keyArticle keyArticle /}
-#{/list}
+<div class="container">
+	<div class="row-fluid">
+	#{list items:keyArticles, as:'keyArticle'}
+		#{keyArticle keyArticle /}
+	#{/list}
+	
+	%{
+ 	 	for(int i = keyArticles.size(); i < 4; i++) { 
+	}%
+ 	 	#{GhostKeyArticle /}
+	%{
+ 		 }
+	}%
+	</div>
 
-%{
-  for(int i = keyArticles.size(); i < 4; i++) { 
-}%
-  #{GhostKeyArticle /}
-%{
-  }
-}%
+	<div class="row-fluid">
+	%{
+	  for(int i = 0; i < keyArticles.size(); i++) {
+	}%
+ 	 <div class="span3 text-center">
+ 	 	<a href="@{Application.removeKeyArticle(keyArticles.get(i).id)}" class="btn" type="button">
+  			<i class="icon-trash"></i> delete article
+  		</a>
+  	</div>
+	%{
+ 	 }
+	}%
+
+	%{
+ 	 	for(int i = keyArticles.size(); i < 4; i++) { 
+	}%
+ 	 <div class="span3 text-center">
+ 	 	<a href="@{Application.addKeyArticle()}" class="btn" type="button">
+  			<i class="icon-file"></i> add article
+  		</a>
+  	</div>
+	%{
+ 		 }
+	}%
+
+
+</div>
+
+</div>
 
 <div class="container" id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}
-<div class="" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}">
+<div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}">
 <a href="@{Application.markAsRead(relatedArticle.id)}" class="btn">mark as read</a>
 </div>
-<hr>
 #{/list}
 </div>
 
@@ -31,5 +63,17 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	loadDocuments('${pmids}');
+	var maxHeight = 0;
+	$('.key-article').each(function(){
+		if($(this).height() > maxHeight){
+			maxHeight = $(this).height();
+			console.log(maxHeight);
+		}
+	});
+	
+	$('.key-article').each(function(){
+		$(this).height(maxHeight);
+	});
+	
 });
 </script>

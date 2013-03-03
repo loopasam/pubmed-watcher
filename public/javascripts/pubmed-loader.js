@@ -37,14 +37,12 @@ function loadDocuments(pmids){
 
 function appendArticle(pmid, date, journal, title, authorList) {
 	var article = $('<div></div>');
-	article.append('<div>' + pmid + '</div>');
-	article.append('<div>' + title + '</div>');
-	article.append('<div>' + authorList + '</div>');
-	article.append('<div>' + date + '</div>');
-	article.append('<div>' + journal + '</div>');
+	article.append('<p><strong>' + title + '</strong></p>');
+	article.append('<p>' + authorList + '</p>');
+	article.append('<p>' + journal + ' - ' + date + ' - PMID: ' + pmid + '</p>');
 	var score = $('#' + pmid).attr('data-score');
 	if(score != NaN){
-		article.append('<div class="progress progress-striped"><div class="bar" style="width: ' + score + '%;"></div></div>');
+		article.append('<div class="progress progress-striped"><div class="bar" style="width: ' + score + '%;">'+score+'% relative relatedness</div></div>');
 	}
 	$('#' + pmid).append(article);
 	$('#' + pmid).show();
