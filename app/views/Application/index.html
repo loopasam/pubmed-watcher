@@ -53,15 +53,22 @@
 #{if relatedArticles.size() < 1}
 <div class="container text-center">
 	<div class="well">
-		<h1>Welcome!</h1>
-		<p>Thanks for registring, here is what you need to know to get quickly started:</p>
+		<h1 class="text-success">Welcome!</h1>
+		<p class="lead">Thanks for registring, here is what you need to know to get quickly started:</p>
 		<h2>Step 1 - Add a Key Article</h2>
 		<p class="lead">Define your research topic by setting up to four Key Articles. For instance you can use your
-		own work as input or the papers of the lab you are working in at the moment. Key Articles represent the 
-		science you care about. They must be referenced on <a href="http://www.ncbi.nlm.nih.gov/pubmed/">PubMed</a>.</p>
+		own work as input or the papers of the lab you are working in at the moment. Key Articles describe the 
+		science you care about. The articles must be referenced on <a href="http://www.ncbi.nlm.nih.gov/pubmed/">PubMed</a>.</p>
 		<p></p>
-		<h2>Step 2 - Read relevant stuff!</h2>
-		<p class="lead">A Key Article is the only concept you need to understand. </p>
+		<h2>Step 2 - Read relevant stuff</h2>
+		<p class="lead">PubMed Watcher will provide you with a feed of related articles, sorted by relevance and similarity in regards to
+		the Key Articles content.
+		The more Key Articles you have, the more tailored the list will be. PubMed Watcher helps to abstract away from journals,
+		impact factors and date of publishing. Spend time reading, not searching! Come back every now and then to monitor your field and
+		to get relevant literature to read.</p>
+		<p class="lead">Ready? <a href="@{Application.addKeyArticle()}">Add your first Key Article</a>
+		or <a href="@{Presentation.about()}">learn more about PubMed Watcher machinery.</a>
+		</p>
 	</div>
 </div>
 #{/if}
