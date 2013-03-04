@@ -27,7 +27,7 @@ public class RelatedArticle extends Model {
 	}
 
 	private double getStandardizedScore(double similarity, double highestScore) {
-		return Math.round(similarity * 100.0 / highestScore);
+		return similarity * 100.0 / highestScore;
 	}
 
 	public void update(double newSimilarity, double highestScore) {

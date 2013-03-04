@@ -29,7 +29,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('ul .${_arg}').addClass("active");
+
+	$('ul ${_arg}').addClass("active");
 	var email = $('#email').html();
 	if(email == ""){
 		$('.logged-info').hide();

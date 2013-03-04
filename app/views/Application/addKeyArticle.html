@@ -1,3 +1,11 @@
+#{extends 'main.html' /}
+#{set title:'PubMed Watcher - Add key article' /}
+#{script 'pubmed-loader.js' /}
+
+#{set email:email /}
+#{menu '' /}
+
+<div class="container">
 #{ifErrors}
  
    <h1>Oops…</h1>
@@ -7,13 +15,33 @@
    #{/errors}
  
 #{/ifErrors}
-//TODO shows ajax loader onClick button
-#{form @Application.addnewKeyArticle()}
-  <fieldset>
-    <legend>Legend</legend>
-    <label>Label name</label>
-    <input name="pmid" type="text" placeholder="Enter a valid PMID…">
-    <span class="help-block">Where to find the PMID?</span>
-    <button type="submit" class="btn">Submit</button>
-  </fieldset>
-#{/form}
+
+	#{form @Application.addnewKeyArticle()}
+  		<fieldset>
+    	<legend>Add a new Key Article</legend>
+    	<label>Key Articles must have a PubMed identifier (PMID) which should be entered below:</label>
+    	<div class="input-append">
+    		<input class="input-xlarge" name="pmid" type="text" placeholder="Enter the PMID of your Key Article">
+    		<button type="submit" class="btn"><span id="text-button-add">add key article</span>
+    		<img style="display: none;" class="loader" src="@{'/public/images/ajax-loader.gif'}" />
+    		</button>
+    	</div>
+    	<span class="help-block">Where do I find the PMID?</span>
+    	<span class="help-block">Go on <a href="http://www.ncbi.nlm.nih.gov/pubmed/">PubMed</a> and search for the article
+    	you want, etc.</span>
+    	
+  	</fieldset>
+	#{/form}
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('button').click(function() {
+		$('#text-button-add').hide();
+		$('.loader').show();
+	});
+	
+	
+});
+</script>

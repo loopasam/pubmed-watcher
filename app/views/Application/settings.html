@@ -4,3 +4,24 @@
 
 #{set email:email /}
 #{menu /}
+
+<div class="container">
+<h2>Settings</h2>
+
+<p>User email address: ${email}</p>
+
+#{form @Application.addnewKeyArticle()}
+	<fieldset>
+   	<legend>Delete account</legend>
+   	<label>You can delete your account</label>
+   	<input class="input-xlarge" name="pmid" type="text" placeholder="Enter the PMID of your Key Article">
+   	<label class="checkbox">
+      <input type="checkbox"> I understand that my profile will be lost
+    </label>
+    <button type="submit" class="btn btn-danger">delete account</button>
+</fieldset>
+#{/form}
+
+
+
+</div>

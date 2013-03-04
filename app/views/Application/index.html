@@ -3,7 +3,7 @@
 #{script 'pubmed-loader.js' /}
 
 #{set email:email /}
-#{menu 'home-link' /}
+#{menu '.home-link' /}
 
 <div class="container">
 	<div class="row-fluid">
@@ -25,8 +25,9 @@
 	  for(int i = 0; i < keyArticles.size(); i++) {
 	}%
  	 <div class="span3 text-center">
- 	 	<a href="@{Application.removeKeyArticle(keyArticles.get(i).id)}" class="btn" type="button">
-  			<i class="icon-trash"></i> delete article
+ 	 	<a href="@{Application.removeKeyArticle(keyArticles.get(i).id)}" class="btn delete-article-action" type="button">
+  			<span><i class="icon-trash"></i> delete article</span>
+  			<img style="display: none;" class="loader" src="@{'/public/images/ajax-loader.gif'}" />
   		</a>
   	</div>
 	%{
@@ -50,7 +51,7 @@
 
 <div class="container" id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}
-<div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}" data-id="${relatedArticle.id}">
+<div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${Math.round(relatedArticle.standardizedSimilarity)}" data-id="${relatedArticle.id}">
 <a href="@{Application.markAsRead(relatedArticle.id)}" class="btn pull-right btn-mini markasread">
 <i class="icon-eye-open"></i> mark as read</a>
 </div>
@@ -70,12 +71,16 @@ $(document).ready(function() {
 	$('.key-article').each(function(){
 		if($(this).height() > maxHeight){
 			maxHeight = $(this).height();
-			console.log(maxHeight);
 		}
 	});
 	
 	$('.key-article').each(function(){
 		$(this).height(maxHeight);
+	});
+	
+	$('.delete-article-action').click(function() {
+		$(this).find('span').hide();
+		$(this).find('img').show();
 	});
 	
 });

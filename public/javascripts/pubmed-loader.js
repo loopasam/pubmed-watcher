@@ -1,4 +1,4 @@
-function loadDocuments(pmids){
+function loadDocuments(pmids, toHide){
 	$.ajax({
 		url: "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=" + pmids,
 		type: "GET",
@@ -25,7 +25,10 @@ function loadDocuments(pmids){
 				});
 
 				appendArticle(pmid, date, journal, title, authorList);
-				$('.show-more').show();
+				if(!toHide){
+					$('.show-more').show();
+				}
+				
 			});
 		},
 		// callback handler that will be called on error
@@ -41,7 +44,7 @@ function appendArticle(pmid, date, journal, title, authorList) {
 	article.append('<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/'+pmid+'" target="_BLANK"><strong>' + title + '</strong></a></p>');
 	article.append('<p>' + authorList + '</p>');
 			
-	article.append('<p class="foo">' + journal + ' - <em>' + date + '</em> - PMID: ' + pmid + '</p>');
+	article.append('<p>' + journal + ' - <em>' + date + '</em> - PMID: ' + pmid + '</p>');
 	
 	var readInteraction = $('#' + pmid + ' a');
 	$('#' + pmid + ' a').remove();
@@ -49,7 +52,7 @@ function appendArticle(pmid, date, journal, title, authorList) {
 	
 	var score = $('#' + pmid).attr('data-score');
 			
-	if(score != NaN){
+	if(score != undefined){
 		article.append('<div class="progress progress-striped" style="margin-bottom: 0px;"><div class="bar" style="width: ' + score + '%;">'+score+'% relative relatedness</div></div>');
 	}
 	$('#' + pmid).append(article);
@@ -71,6 +74,7 @@ $(document).ready(function() {
 				var isFirst = true;
 				$(that).attr('data-pagination', newPagination);
 				var verif = 0;
+				var toHide = false;
 				$.each(json, function() {
 					verif++;
 					if(isFirst){
@@ -79,13 +83,14 @@ $(document).ready(function() {
 					}else{
 						pmids += "," + this.pmid;
 					}
-					$('#related-articles').append('<div class="well" style="display: none;" id="'+ this.pmid +'" data-score="' + this.score + '">'+
+					$('#related-articles').append('<div class="well" style="display: none;" id="'+ this.pmid +'" data-score="' + Math.round(this.score) + '">'+
 							'<a href="/markAsRead/'+ this.id +'" class="btn pull-right btn-mini markasread"><i class="icon-eye-open"></i> mark as read</a></a></div>');
 				});
 				if(verif < 10){
+					toHide = true;
 					$('#showMoreRelatedArticles').hide();
 				}
-				loadDocuments(pmids);
+				loadDocuments(pmids, toHide);
 			},
 			// callback handler that will be called on error
 			error: function(jqXHR, textStatus, errorThrown){
@@ -108,6 +113,7 @@ $(document).ready(function() {
 				var isFirst = true;
 				$(that).attr('data-pagination', newPagination);
 				var verif = 0;
+				var toHide = false;
 				$.each(json, function() {
 					verif++;
 					if(isFirst){
@@ -116,13 +122,14 @@ $(document).ready(function() {
 					}else{
 						pmids += "," + this.pmid;
 					}
-					$('#read-articles').append('<div style="display: none;" id="'+ this.pmid +'">'+
-							'<a href="/unMarkAsRead/' + this.pmid + '" class="btn">unmark as read</a></div><hr>');
+					$('#read-articles').append('<div class="well" style="display: none;" id="'+ this.pmid +'">'+
+							'<a href="/unMarkAsRead/' + this.pmid + '" class="btn"><i class="icon-eye-close"></i> mark as unread</a></div>');
 				});
 				if(verif < 10){
+					toHide = true;
 					$('#showMoreReadArticles').hide();
 				}
-				loadDocuments(pmids);
+				loadDocuments(pmids, toHide);
 			},
 			// callback handler that will be called on error
 			error: function(jqXHR, textStatus, errorThrown){

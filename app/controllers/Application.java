@@ -52,11 +52,13 @@ public class Application extends Controller {
 	}
 
 	public static void addKeyArticle() {
-		render();
+		String email = connected().email;
+		render(email);
 	}
 	
 	public static void settings(){
-		render();
+		String email = connected().email;
+		render(email);
 	}
 	
 	public static void removeKeyArticle(long id) {
@@ -124,7 +126,7 @@ public class Application extends Controller {
 
 	public static void addnewKeyArticle(int pmid) {
 
-		if(connected().keyArticles.size() > 4){
+		if(connected().keyArticles.size() > 3){
 			//TODO handle problem in connection too and configure errors
 			index();
 		}

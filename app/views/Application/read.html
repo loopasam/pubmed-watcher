@@ -3,21 +3,23 @@
 #{script 'pubmed-loader.js' /}
 
 #{set email:email /}
-#{menu 'read-link' /}
+#{menu '.read-link' /}
 
-
-//TODO if size == zero --> message
-
-<div id="read-articles">
+<div id="read-articles" class="container">
 #{list items:readArticlePmids, as:'readArticlePmid'}
-<div style="display: none;" id="${readArticlePmid}">
-<a href="@{Application.unMarkAsRead(readArticlePmid)}" class="btn">unmark as read</a>
+<div class="well" style="display: none;" id="${readArticlePmid}">
+<a href="@{Application.unMarkAsRead(readArticlePmid)}" class="btn btn-mini">
+	<i class="icon-eye-close"></i> mark as unread</a>
 </div>
-<hr>
 #{/list}
 </div>
 
-<button id="showMoreReadArticles" class="btn" data-pagination="${readArticlePmids.size()}" type="button">Show More</button>
+<div class="container text-center" style="margin-bottom: 20px;">
+	<button id="showMoreReadArticles" class="btn btn-large show-more" data-pagination="${readArticlePmids.size()}" type="button" style="display: none;">
+		show more
+	</button>
+</div>
+
 
 <script type="text/javascript">
 $(document).ready(function() {
