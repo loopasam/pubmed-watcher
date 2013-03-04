@@ -31,6 +31,8 @@ import utils.MapUtil;
 public class User extends Model {
 
 	public String email;
+	
+	public String accessToken;
 
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	public List<RelatedArticle> relatedArticles;
@@ -41,7 +43,8 @@ public class User extends Model {
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	public List<KeyArticle> keyArticles;
 
-	public User(String email){
+	public User(String email, String accessToken){
+		this.accessToken = accessToken;
 		this.email = email;
 		this.relatedArticles = new ArrayList<RelatedArticle>();
 		this.readArticlePmids = new ArrayList<Integer>();

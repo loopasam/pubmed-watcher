@@ -6,6 +6,7 @@
 #{menu '.home-link' /}
 
 <div class="container">
+	
 	<div class="row-fluid">
 	#{list items:keyArticles, as:'keyArticle'}
 		#{keyArticle keyArticle /}
@@ -48,6 +49,23 @@
 </div>
 
 </div>
+
+#{if relatedArticles.size() < 1}
+<div class="container text-center">
+	<div class="well">
+		<h1>Welcome!</h1>
+		<p>Thanks for registring, here is what you need to know to get quickly started:</p>
+		<h2>Step 1 - Add a Key Article</h2>
+		<p class="lead">Define your research topic by setting up to four Key Articles. For instance you can use your
+		own work as input or the papers of the lab you are working in at the moment. Key Articles represent the 
+		science you care about. They must be referenced on <a href="http://www.ncbi.nlm.nih.gov/pubmed/">PubMed</a>.</p>
+		<p></p>
+		<h2>Step 2 - Read relevant stuff!</h2>
+		<p class="lead">A Key Article is the only concept you need to understand. </p>
+	</div>
+</div>
+#{/if}
+
 
 <div class="container" id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}

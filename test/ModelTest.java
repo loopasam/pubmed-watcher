@@ -15,7 +15,7 @@ public class ModelTest extends UnitTest {
 
 	@Test
 	public void createAndRetrieveUser() {
-		new User("bob@gmail.com").save();
+		new User("bob@gmail.com", "dummy").save();
 		User bob = User.find("byEmail", "bob@gmail.com").first();
 		assertNotNull(bob);
 		assertEquals("bob@gmail.com", bob.email);
@@ -23,7 +23,7 @@ public class ModelTest extends UnitTest {
 
 	@Test
 	public void useRelatedArticleRelation() {
-		User bob = new User("bob@gmail.com").save();
+		User bob = new User("bob@gmail.com", "dummy").save();
 		bob.addRelatedArticle(1234, 90, 45);
 		bob.addRelatedArticle(12345, 80, 56);
 		assertEquals(2, bob.relatedArticles.size());
@@ -46,7 +46,7 @@ public class ModelTest extends UnitTest {
 	
 	@Test
 	public void markAsRead() {
-		User bob = new User("bob@gmail.com").save();
+		User bob = new User("bob@gmail.com", "dummy").save();
 		bob.addRelatedArticle(1234, 90, 34);
 		bob.addRelatedArticle(12345, 80, 56);
 		assertEquals(2, bob.relatedArticles.size());
@@ -61,11 +61,11 @@ public class ModelTest extends UnitTest {
 	
 	@Test
 	public void addKeyArticle(){
-		User bob = new User("bob@gmail.com").save();
+		User bob = new User("bob@gmail.com", "dummy").save();
 		bob.addKeyArticle(1234);
 		assertEquals(1, bob.keyArticles.size());
 		
-		User joe = new User("joe@gmail.com").save();
+		User joe = new User("bob@gmail.com", "dummy").save();
 		joe.addKeyArticle(4321);
 		joe.addKeyArticle(1234);
 		assertEquals(2, joe.keyArticles.size());
@@ -76,10 +76,10 @@ public class ModelTest extends UnitTest {
 	
 	@Test
 	public void removeKeyArticle() {
-		User bob = new User("bob@gmail.com").save();
+		User bob = new User("bob@gmail.com", "dummy").save();
 		bob.addKeyArticle(1234);
 		
-		User joe = new User("joe@gmail.com").save();
+		User joe = new User("bob@gmail.com", "dummy").save();
 		joe.addKeyArticle(4321);
 		joe.addKeyArticle(1234);
 		

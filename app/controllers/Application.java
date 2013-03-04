@@ -77,6 +77,14 @@ public class Application extends Controller {
 		session.put("updated", "false");
 		index();
 	}
+	
+	public static void deleteAccount(String email, boolean confirmed) throws Throwable{
+		if(email.equals(connected().email) && confirmed){
+			Security.revoke();
+		}else{
+			settings();
+		}
+	}
 
 	public static void read(){
 

@@ -34,13 +34,13 @@ public class Security extends Controller {
 				String restOfCookie = remember.value.substring(firstIndex + 1);
 				String email = remember.value.substring(firstIndex + 1, lastIndex);
 				//TODO delete this block - leave the browser doing the expiration work
-//				String time = remember.value.substring(lastIndex + 1);
-//				Date expirationDate = new Date(Long.parseLong(time));
-//				Date now = new Date();
-//				if (expirationDate == null || expirationDate.before(now)) {
-//					System.out.println("coockie is expired: " + expirationDate.toGMTString());
-//					logout();
-//				}
+				//				String time = remember.value.substring(lastIndex + 1);
+				//				Date expirationDate = new Date(Long.parseLong(time));
+				//				Date now = new Date();
+				//				if (expirationDate == null || expirationDate.before(now)) {
+				//					System.out.println("coockie is expired: " + expirationDate.toGMTString());
+				//					logout();
+				//				}
 				if(Crypto.sign(restOfCookie).equals(sign)) {
 					System.out.println("email is put in the session...");
 					session.put("email", email);
@@ -50,7 +50,7 @@ public class Security extends Controller {
 		}
 
 		//TODO do something nicer (link, logo, etc...) for the authorisation OAUth via google
-		
+
 		//The user is supposed to let access to it's information
 		String urlGoogleOAuth = "https://accounts.google.com/o/oauth2/auth?" +
 				"scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+" +
@@ -60,7 +60,7 @@ public class Security extends Controller {
 				"&client_id=65272228633.apps.googleusercontent.com";
 		//The response is redirected on the auth() method.
 		redirect(urlGoogleOAuth);
-				
+
 	}
 
 
@@ -95,7 +95,7 @@ public class Security extends Controller {
 
 				User user = User.find("byEmail", email).first();
 				if(user == null){
-					new User(email).save();
+					new User(email, accessToken).save();
 				}
 
 				Application.index();
@@ -110,4 +110,15 @@ public class Security extends Controller {
 		Presentation.index();
 	}
 
+	public static void revoke() {
+
+		System.out.println("https://accounts.google.com/o/oauth2/revoke?token="+Application.connected().accessToken);
+		WS.url("https://accounts.google.com/o/oauth2/revoke?token="+Application.connected().accessToken).get();
+
+		Application.connected().delete();
+		try {
+			Security.logout();
+		} catch (Throwable exception) {	}
+
+	}
 }
