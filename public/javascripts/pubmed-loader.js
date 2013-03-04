@@ -25,6 +25,7 @@ function loadDocuments(pmids){
 				});
 
 				appendArticle(pmid, date, journal, title, authorList);
+				$('.show-more').show();
 			});
 		},
 		// callback handler that will be called on error
@@ -37,21 +38,19 @@ function loadDocuments(pmids){
 
 function appendArticle(pmid, date, journal, title, authorList) {
 	var article = $('<div></div>');
-	article.append('<p><strong>' + title + '</strong></p>');
+	article.append('<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/'+pmid+'" target="_BLANK"><strong>' + title + '</strong></a></p>');
 	article.append('<p>' + authorList + '</p>');
 			
-	article.append('<p class="foo">' + journal + ' - ' + date + ' - PMID: ' + pmid + '</p>');
+	article.append('<p class="foo">' + journal + ' - <em>' + date + '</em> - PMID: ' + pmid + '</p>');
 	
-	//TODO here
 	var readInteraction = $('#' + pmid + ' a');
 	$('#' + pmid + ' a').remove();
-	readInteraction.addClass('pull-right btn-mini');
 	article.append(readInteraction);
 	
 	var score = $('#' + pmid).attr('data-score');
 			
 	if(score != NaN){
-		article.append('<div class="progress progress-striped"><div class="bar" style="width: ' + score + '%;">'+score+'% relative relatedness</div></div>');
+		article.append('<div class="progress progress-striped" style="margin-bottom: 0px;"><div class="bar" style="width: ' + score + '%;">'+score+'% relative relatedness</div></div>');
 	}
 	$('#' + pmid).append(article);
 	$('#' + pmid).show();
@@ -80,8 +79,8 @@ $(document).ready(function() {
 					}else{
 						pmids += "," + this.pmid;
 					}
-					$('#related-articles').append('<div style="display: none;" id="'+ this.pmid +'" data-score="' + this.score + '">'+
-							'<a href="/markAsRead/'+ this.id +'" class="btn">mark as read</a></div><hr>');
+					$('#related-articles').append('<div class="well" style="display: none;" id="'+ this.pmid +'" data-score="' + this.score + '">'+
+							'<a href="/markAsRead/'+ this.id +'" class="btn pull-right btn-mini markasread"><i class="icon-eye-open"></i> mark as read</a></a></div>');
 				});
 				if(verif < 10){
 					$('#showMoreRelatedArticles').hide();

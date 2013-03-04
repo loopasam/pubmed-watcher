@@ -20,7 +20,7 @@
 	}%
 	</div>
 
-	<div class="row-fluid">
+	<div class="row-fluid" style="margin-bottom: 15px;">
 	%{
 	  for(int i = 0; i < keyArticles.size(); i++) {
 	}%
@@ -44,8 +44,6 @@
 	%{
  		 }
 	}%
-
-
 </div>
 
 </div>
@@ -53,12 +51,17 @@
 <div class="container" id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}
 <div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}" data-id="${relatedArticle.id}">
-<a href="@{Application.markAsRead(relatedArticle.id)}" class="btn">mark as read</a>
+<a href="@{Application.markAsRead(relatedArticle.id)}" class="btn pull-right btn-mini markasread">
+<i class="icon-eye-open"></i> mark as read</a>
 </div>
 #{/list}
 </div>
 
-<button id="showMoreRelatedArticles" class="btn" data-pagination="${relatedArticles.size()}" type="button">Show More</button>
+<div class="container text-center" style="margin-bottom: 20px;">
+	<button id="showMoreRelatedArticles" class="btn btn-large show-more" data-pagination="${relatedArticles.size()}" type="button" style="display: none;">
+		show more
+	</button>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function() {

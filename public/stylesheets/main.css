@@ -22,3 +22,7 @@ body {
 	padding-top: 60px;
 	background: repeat url('/public/images/natural_paper.png');
 }
+
+.markasread {
+	margin-left: 10px;
+}
