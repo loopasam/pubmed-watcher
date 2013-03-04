@@ -25,8 +25,6 @@ public class Security extends Controller {
 	}
 
 	public static void login() throws Throwable {
-
-		System.out.println("Doing the login...");
 		Http.Cookie remember = request.cookies.get("pubmedwatcher");
 		if(remember != null) {
 			int firstIndex = remember.value.indexOf("-");

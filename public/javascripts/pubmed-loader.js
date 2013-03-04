@@ -39,8 +39,17 @@ function appendArticle(pmid, date, journal, title, authorList) {
 	var article = $('<div></div>');
 	article.append('<p><strong>' + title + '</strong></p>');
 	article.append('<p>' + authorList + '</p>');
-	article.append('<p>' + journal + ' - ' + date + ' - PMID: ' + pmid + '</p>');
+			
+	article.append('<p class="foo">' + journal + ' - ' + date + ' - PMID: ' + pmid + '</p>');
+	
+	//TODO here
+	var readInteraction = $('#' + pmid + ' a');
+	$('#' + pmid + ' a').remove();
+	readInteraction.addClass('pull-right btn-mini');
+	article.append(readInteraction);
+	
 	var score = $('#' + pmid).attr('data-score');
+			
 	if(score != NaN){
 		article.append('<div class="progress progress-striped"><div class="bar" style="width: ' + score + '%;">'+score+'% relative relatedness</div></div>');
 	}

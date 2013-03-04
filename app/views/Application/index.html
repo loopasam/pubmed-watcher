@@ -52,7 +52,7 @@
 
 <div class="container" id="related-articles">
 #{list items:relatedArticles, as:'relatedArticle'}
-<div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}">
+<div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${relatedArticle.standardizedSimilarity}" data-id="${relatedArticle.id}">
 <a href="@{Application.markAsRead(relatedArticle.id)}" class="btn">mark as read</a>
 </div>
 #{/list}

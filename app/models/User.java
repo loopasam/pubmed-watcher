@@ -126,8 +126,6 @@ public class User extends Model {
 						newRelatedArticlesIds.add(id);
 						newRelatedArticlesScores.put(id, similarity);
 					}
-				}else{
-					System.out.println("Article not considered as related article: " + id);
 				}
 			}
 		}

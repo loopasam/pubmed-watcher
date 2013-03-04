@@ -154,7 +154,6 @@ public class Application extends Controller {
 			connected().keyArticles.add(newKeyArticle);
 			newKeyArticle.save();
 			connected().save();
-			System.out.println("new article added to the existing ones");
 		} 
 
 		session.put("updated", "false");
