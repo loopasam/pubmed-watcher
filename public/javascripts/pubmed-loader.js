@@ -1,4 +1,5 @@
 function loadDocuments(pmids, toHide){
+	$('.loader-articles').show();
 	$.ajax({
 		url: "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=" + pmids,
 		type: "GET",
@@ -30,10 +31,12 @@ function loadDocuments(pmids, toHide){
 				}
 				
 			});
+			$('.show-more span').show();
+			$('.show-more img').hide();
+			$('.loader-articles').hide();
 		},
 		// callback handler that will be called on error
 		error: function(jqXHR, textStatus, errorThrown){
-			//TODO handle the error
 			console.log("The following error occured: "+ textStatus, errorThrown);
 		}
 	});
@@ -64,6 +67,8 @@ $(document).ready(function() {
 
 	$('#showMoreRelatedArticles').click(function(){
 		var that = this;
+		$('.show-more span').hide();
+		$('.show-more img').show();
 		var pagination = $(this).attr('data-pagination');
 		$.ajax({
 			url: "/moreRelatedArticles/" + pagination,
@@ -94,7 +99,6 @@ $(document).ready(function() {
 			},
 			// callback handler that will be called on error
 			error: function(jqXHR, textStatus, errorThrown){
-				//TODO handle the error
 				console.log("The following error occured: "+ textStatus, errorThrown);
 			}
 		});
@@ -103,6 +107,8 @@ $(document).ready(function() {
 
 	$('#showMoreReadArticles').click(function(){
 		var that = this;
+		$('.show-more span').hide();
+		$('.show-more img').show();
 		var pagination = $(this).attr('data-pagination');
 		$.ajax({
 			url: "/moreReadArticles/" + pagination,
@@ -133,7 +139,6 @@ $(document).ready(function() {
 			},
 			// callback handler that will be called on error
 			error: function(jqXHR, textStatus, errorThrown){
-				//TODO handle the error
 				console.log("The following error occured: "+ textStatus, errorThrown);
 			}
 		});

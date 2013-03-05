@@ -33,16 +33,7 @@ public class Security extends Controller {
 				String sign = remember.value.substring(0, firstIndex);
 				String restOfCookie = remember.value.substring(firstIndex + 1);
 				String email = remember.value.substring(firstIndex + 1, lastIndex);
-				//TODO delete this block - leave the browser doing the expiration work
-				//				String time = remember.value.substring(lastIndex + 1);
-				//				Date expirationDate = new Date(Long.parseLong(time));
-				//				Date now = new Date();
-				//				if (expirationDate == null || expirationDate.before(now)) {
-				//					System.out.println("coockie is expired: " + expirationDate.toGMTString());
-				//					logout();
-				//				}
 				if(Crypto.sign(restOfCookie).equals(sign)) {
-					System.out.println("email is put in the session...");
 					session.put("email", email);
 					Application.index();
 				}
@@ -90,7 +81,6 @@ public class Security extends Controller {
 				Date expiration = new Date();
 				String duration = "10d";
 				expiration.setTime(expiration.getTime() + Time.parseDuration(duration));
-				//TODO remove the time duration bit
 				response.setCookie("pubmedwatcher", Crypto.sign(email + "-" + expiration.getTime()) + "-" + email + "-" + expiration.getTime(), duration);
 
 				User user = User.find("byEmail", email).first();
@@ -112,10 +102,11 @@ public class Security extends Controller {
 
 	public static void revoke() {
 
-		System.out.println("https://accounts.google.com/o/oauth2/revoke?token="+Application.connected().accessToken);
 		WS.url("https://accounts.google.com/o/oauth2/revoke?token="+Application.connected().accessToken).get();
 
 		Application.connected().delete();
+		session.clear();
+		response.removeCookie("pubmedwatcher");
 		try {
 			Security.logout();
 		} catch (Throwable exception) {	}

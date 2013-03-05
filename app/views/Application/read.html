@@ -6,6 +6,7 @@
 #{menu '.read-link' /}
 
 <div id="read-articles" class="container">
+<div class="loader-articles" style="text-align: center; display: none;"><img src="@{'/public/images/ajax-loader.gif'}"></div>
 #{list items:readArticlePmids, as:'readArticlePmid'}
 <div class="well" style="display: none;" id="${readArticlePmid}">
 <a href="@{Application.unMarkAsRead(readArticlePmid)}" class="btn btn-mini">
@@ -14,12 +15,14 @@
 #{/list}
 </div>
 
+#{if someLeft}
 <div class="container text-center" style="margin-bottom: 20px;">
 	<button id="showMoreReadArticles" class="btn btn-large show-more" data-pagination="${readArticlePmids.size()}" type="button" style="display: none;">
-		show more
+		<span>show more</span>
+		<img style="display: none;" src="@{'/public/images/ajax-loader.gif'}">
 	</button>
 </div>
-
+#{/if}
 
 <script type="text/javascript">
 $(document).ready(function() {

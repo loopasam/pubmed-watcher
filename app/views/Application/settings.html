@@ -15,8 +15,20 @@
    	<legend>Delete account</legend>
    	<label><Strong>This operation cannot be reversed</strong></label>
    	<label>Your information will entirely 
-   	be erased from PubMed Watcher and your profile unlinked to your Google account.</label>
+   	be erased from PubMed Watcher and your profile unlinked to your Google account 
+   	(make sure of that <a href="https://accounts.google.com/IssuedAuthSubTokens?service=mail" target="_BLANK">here</a>).</label>
    	<label>You can sign up again any time in the future if you want to.</label>
+
+#{ifErrors}
+   #{errors}
+       <div class="alert alert-error">
+  		<strong>${error}</strong>
+		</div>
+   #{/errors}
+#{/ifErrors}
+
+
+
    	<input class="input-xlarge" name="email" type="text" placeholder="Enter your email address to confirm">
    	<label class="checkbox">
       <input input id="confirm" type="checkbox" name="confirmed" ${confirmed ? 'checked':''}> I understand that my profile will be lost

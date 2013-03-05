@@ -6,6 +6,15 @@
 #{menu '.home-link' /}
 
 <div class="container">
+
+#{ifErrors}
+   #{errors}
+       <div class="alert alert-error">
+  		<strong>${error}</strong>
+		</div>
+   #{/errors}
+#{/ifErrors}
+
 	
 	<div class="row-fluid">
 	#{list items:keyArticles, as:'keyArticle'}
@@ -58,6 +67,7 @@
 
 
 <div class="container" id="related-articles">
+<div class="loader-articles" style="text-align: center; display: none;"><img src="@{'/public/images/ajax-loader.gif'}"></div>
 #{list items:relatedArticles, as:'relatedArticle'}
 <div class="well" style="display: none;" id="${relatedArticle.pmid}" data-score="${Math.round(relatedArticle.standardizedSimilarity)}" data-id="${relatedArticle.id}">
 <a href="@{Application.markAsRead(relatedArticle.id)}" class="btn pull-right btn-mini markasread">
@@ -68,7 +78,8 @@
 
 <div class="container text-center" style="margin-bottom: 20px;">
 	<button id="showMoreRelatedArticles" class="btn btn-large show-more" data-pagination="${relatedArticles.size()}" type="button" style="display: none;">
-		show more
+		<span>show more</span>
+		<img style="display: none;" src="@{'/public/images/ajax-loader.gif'}">
 	</button>
 </div>
 

@@ -6,14 +6,13 @@
 #{menu '' /}
 
 <div class="container">
+
 #{ifErrors}
- 
-   <h1>Oops…</h1>
- 
    #{errors}
-       <li>${error}</li>
+       <div class="alert alert-error">
+  		<strong>${error}</strong>
+		</div>
    #{/errors}
- 
 #{/ifErrors}
 
 	#{form @Application.addnewKeyArticle()}

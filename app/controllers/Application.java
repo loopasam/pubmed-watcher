@@ -7,6 +7,7 @@ import play.libs.XPath;
 import play.libs.WS.HttpResponse;
 import play.mvc.*;
 
+import java.net.ConnectException;
 import java.util.*;
 
 import org.w3c.dom.Document;
@@ -55,12 +56,12 @@ public class Application extends Controller {
 		String email = connected().email;
 		render(email);
 	}
-	
+
 	public static void settings(){
 		String email = connected().email;
 		render(email);
 	}
-	
+
 	public static void removeKeyArticle(long id) {
 		connected().removeKeyArticle(id);
 		session.put("updated", "false");
@@ -77,11 +78,14 @@ public class Application extends Controller {
 		session.put("updated", "false");
 		index();
 	}
-	
+
 	public static void deleteAccount(String email, boolean confirmed) throws Throwable{
+
 		if(email.equals(connected().email) && confirmed){
 			Security.revoke();
 		}else{
+			validation.addError(null, "Please enter your email address and tick the box in order to delete your account.");
+			validation.keep();
 			settings();
 		}
 	}
@@ -89,9 +93,11 @@ public class Application extends Controller {
 	public static void read(){
 
 		int pagination = 10;
+		boolean someLeft = true;
 
-		if(connected().readArticlePmids.size() < pagination){
+		if(connected().readArticlePmids.size() <= pagination){
 			pagination = connected().readArticlePmids.size();
+			someLeft = false;
 		}
 
 		List<Integer> readArticlePmids = connected().readArticlePmids.subList(0, pagination);
@@ -106,13 +112,13 @@ public class Application extends Controller {
 			}
 		}
 		String email = connected().email;
-		render(readArticlePmids, pmids, email);
+		render(readArticlePmids, pmids, email, someLeft);
 	}
 
 	public static void moreReadArticles(int pagination){
-		
+
 		int oldPagination = pagination;
-		
+
 		if(connected().readArticlePmids.size() < 10 + pagination){
 			pagination = connected().readArticlePmids.size();
 		}else{
@@ -120,7 +126,7 @@ public class Application extends Controller {
 		}
 
 		List<Integer> readArticlePmids = connected().readArticlePmids.subList(oldPagination, pagination);
-					
+
 		render("Application/readArticles.json", readArticlePmids);
 	}
 
@@ -135,21 +141,20 @@ public class Application extends Controller {
 	public static void addnewKeyArticle(int pmid) {
 
 		if(connected().keyArticles.size() > 3){
-			//TODO handle problem in connection too and configure errors
+			validation.addError(null, "Already four Key Articles, you sneaky!");
+			validation.keep();
 			index();
 		}
 
 		//http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=11850928,11482001
 		HttpResponse res = WS.url("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?" +
 				"db=pubmed&id=" + pmid).get();
-		int status = res.getStatus();
-		//TODO If bad status then go back to home page + error message
-		System.out.println("status key article: " + status);
+
 		Document xml = res.getXml();
 		//Iterates over the XML results and get pmids and scores out
 
 		if(XPath.selectNodes("//DocSum", xml).size() == 0){
-			//TODO handle problem in connection too and configure errors
+			validation.keep();
 			addKeyArticle();
 		}
 
