@@ -40,8 +40,6 @@ public class Security extends Controller {
 			}
 		}
 
-		//TODO do something nicer (link, logo, etc...) for the authorisation OAUth via google
-
 		//The user is supposed to let access to it's information
 		String urlGoogleOAuth = "https://accounts.google.com/o/oauth2/auth?" +
 				"scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+" +
