@@ -6,6 +6,13 @@
 #{menu '.read-link' /}
 
 <div id="read-articles" class="container">
+
+#{if readArticlePmids.size() < 1}
+<div class="well">
+You don't have any read articles yet.
+</div>
+#{/if}
+
 <div class="loader-articles" style="text-align: center; display: none;"><img src="@{'/public/images/ajax-loader.gif'}"></div>
 #{list items:readArticlePmids, as:'readArticlePmid'}
 <div class="well" style="display: none;" id="${readArticlePmid}">

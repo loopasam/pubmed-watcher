@@ -62,10 +62,12 @@ public class Security extends Controller {
 			Presentation.index();
 		}
 
+		String client_secret = (String) Play.configuration.get("client_secret");
+		
 		//call for access token
 		HttpResponse res = WS.url("https://accounts.google.com/o/oauth2/token").
 				setParameter("code", code).setParameter("client_id", "65272228633.apps.googleusercontent.com").
-				setParameter("client_secret", "59-9NRRPEmjTut1392HWg3cY").setParameter("redirect_uri", "http://localhost:9000/auth").
+				setParameter("client_secret", client_secret).setParameter("redirect_uri", "http://localhost:9000/auth").
 				setParameter("grant_type", "authorization_code").post();
 
 		JsonObject json = res.getJson().getAsJsonObject();
@@ -86,6 +88,10 @@ public class Security extends Controller {
 				User user = User.find("byEmail", email).first();
 				if(user == null){
 					new User(email, accessToken).save();
+				}else{
+					System.out.println("Access token updated");
+					user.accessToken = accessToken;
+					user.save();
 				}
 
 				Application.index();
