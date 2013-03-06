@@ -5,11 +5,40 @@
 #{menu '.about-link' /}
 
 
-<div class="container">
+<div class="container well">
 	<h1>About PubMed Watcher</h1>
-
-	<h2>Open Source</h2>
-	<p>GitHub link, ect...</p>
-	<p>Revoke: https://accounts.google.com/b/0/IssuedAuthSubTokens?hl=en_GB</p>
+	<p class="lead"><a href="http://www.samuelcroset.com">I am</a> developing PubMed Watcher during my free time.
+	This page should answer any questions you have about this application. If there are 
+	further things you would like to know or if want to provide some feedback, 
+	<a href="http://samuelcroset.com/contact">send me an email.</a></p>
+	<h2>An open source project</h2>
+	<p class="lead">The code behind PubMed watcher is freely available on <a target="_BLANK" href="https://github.com/loopasam/pubmed-watcher">GitHub</a>
+	under an <a target="_BLANK" href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>. Submit pull requests if you
+	think a feature is missing or something could be improved. The application has been built with the awesome
+	<a target="_BLANK" href="http://www.playframework.com/">Play! framework</a> and relies on 
+	<a target="_BLANK" href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's</a> delicious style for the front-end.</p>
+	<h2>Based on data from PubMed</h2>
+	<p class="lead">All the data displayed by PubMed Watcher comes straight from the neat
+	<a href="http://www.ncbi.nlm.nih.gov/books/NBK25501/">PubMed-API</a>. It guaranties fresh and up-to-date results. The articles present
+	in the feed are based on a similarity metrics provided by PubMed: This score is calculated by looking at the amount of words shared by
+	a pair articles. Basically, the higher the score is, the more related to articles are. You can read 
+	<a target="_BLANK" href="http://www.biomedcentral.com/1471-2105/8/423">the paper describing the methodology</a> if you want to know more
+	about it. So in summary, each one of your Key Article has a list of related articles with a score attached to each of them.
+	</p>
+	<h2>With a pinch of heuristics</h2>
+	<p class="lead">Now the idea behind PubMed Watcher is to pool the feeds coming from each one of your Key Article.
+	If an article is present in more than one feed, it means that this article seems to be even more interesting to you, that's the heuristic.
+	The redundant article then gets a new higher score which is the sum of all its indivual scores. Example, let's say you have two Key Articles named A and B.
+	A has two similar articles F and G with respective similarity scores of 4 and 2. The Key Article B has two similar articles too: M and G
+	with scores 7 and 6. The feed presented to you by PubMed Watcher will then be: G first (score of 6+2=8), M (score of 7) and finally F (4).
+	This score is standardised in percentages (relative relatedness, the blue bars in the application), so here we would get: 
+	G (100%), M (88%) and F (50%). This metrics is not perfect yet it's intuitive and gives good enough results; plus it's fast to compute.
+	</p>
+	<h2>To simplify your life</h2>
+	<p class="lead">PubMed Watcher goal is to make it fast and easy to read some literature relevant to your field.
+	The secure login via Google makes it easy for the user to log in and for me to maintain. You should come to PubMed Watcher every now and
+	then, when you have time to read something. Your email address is used only to retrieve your profile. I won't be using it
+	for any other purposes, so no spam, nothing, I promise! You can delete your account any time and revoke the access 
+	to your Google profile <a href="https://accounts.google.com/IssuedAuthSubTokens?service=mail">here</a>. I don't keep any track of it.</p>
 	#{footer /}
 </div>

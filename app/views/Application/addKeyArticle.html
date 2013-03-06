@@ -5,7 +5,7 @@
 #{set email:email /}
 #{menu '' /}
 
-<div class="container">
+<div class="container well">
 
 #{ifErrors}
    #{errors}
@@ -25,10 +25,12 @@
     		<img style="display: none;" class="loader" src="@{'/public/images/ajax-loader.gif'}" />
     		</button>
     	</div>
-    	<span class="help-block">Where do I find the PMID?</span>
-    	<span class="help-block">Go on <a href="http://www.ncbi.nlm.nih.gov/pubmed/">PubMed</a> and search for the article
-    	you want, etc.</span>
-    	
+    	<span class="help-block"><em>Where do I find the PMID of the article I have in mind?</em></span>
+    	<span class="help-block">Go on <a href="http://www.ncbi.nlm.nih.gov/pubmed/" target="_BLANK">PubMed</a> and search for the article
+    	you are thinking of the traditional way. The PMID appears at the end of each result and uniquely identifies records.</span>
+    	<span class="help-block"><em>What's a Key Article again?</em></span>
+    	<span class="help-block">It's an article with PubMed identifier (PMID) you think represents your research. The content of
+    	the feed is based on the word content of Key Articles.</span>
   	</fieldset>
 	#{/form}
 </div>
