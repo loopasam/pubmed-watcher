@@ -87,7 +87,6 @@ public class Security extends Controller {
 				if(user == null){
 					new User(email, accessToken).save();
 				}else{
-					System.out.println("Access token updated");
 					user.accessToken = accessToken;
 					user.save();
 				}

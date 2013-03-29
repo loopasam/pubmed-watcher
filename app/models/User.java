@@ -110,7 +110,6 @@ public class User extends Model {
 					"dbfrom=pubmed&db=pubmed&id="+keyArticle.pmid+"&cmd=neighbor_score").get();
 			int status = res.getStatus();
 			//TODO If bad status then go back to home page + error message
-			System.out.println("status: " + status);
 
 			Document xml = res.getXml();
 			//Iterates over the XML results and get pmids and scores out
