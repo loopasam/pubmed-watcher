@@ -2,9 +2,9 @@
 
 Author: Samuel Croset - http://www.samuelcroset.com/
 
-Application: https://www.ebi.ac.uk/chembl/pubmed-watcher
+Application: http://pubmed-watcher.org
 
-Documentation: https://www.ebi.ac.uk/chembl/pubmed-watcher
+Documentation: http://pubmed-watcher.org/about/
 
 ## Source code licensing
 

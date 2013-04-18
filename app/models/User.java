@@ -108,7 +108,7 @@ public class User extends Model {
 			//http://www.ncbi.nlm.nih.gov/books/NBK25499/ --> "cmd=neighbor (default)"
 			HttpResponse res = WS.url("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?" +
 					"dbfrom=pubmed&db=pubmed&id="+keyArticle.pmid+"&cmd=neighbor_score").get();
-			int status = res.getStatus();
+			//int status = res.getStatus();
 			//TODO If bad status then go back to home page + error message
 
 			Document xml = res.getXml();

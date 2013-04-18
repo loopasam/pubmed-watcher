@@ -44,7 +44,7 @@ public class Security extends Controller {
 		String urlGoogleOAuth = "https://accounts.google.com/o/oauth2/auth?" +
 				"scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+" +
 				"&redirect_uri=http%3A%2F%2F" +
-				"localhost:9000%2Fauth" +
+				"pubmed%2Dwatcher%2Eorg%2Fauth" +
 				"&response_type=code" +
 				"&client_id=65272228633.apps.googleusercontent.com";
 		//The response is redirected on the auth() method.
@@ -65,7 +65,7 @@ public class Security extends Controller {
 		//call for access token
 		HttpResponse res = WS.url("https://accounts.google.com/o/oauth2/token").
 				setParameter("code", code).setParameter("client_id", "65272228633.apps.googleusercontent.com").
-				setParameter("client_secret", client_secret).setParameter("redirect_uri", "http://localhost:9000/auth").
+				setParameter("client_secret", client_secret).setParameter("redirect_uri", "http://pubmed-watcher.org/auth").
 				setParameter("grant_type", "authorization_code").post();
 
 		JsonObject json = res.getJson().getAsJsonObject();
