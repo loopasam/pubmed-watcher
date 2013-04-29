@@ -1,31 +1,30 @@
 // The amount of circles we want to make:
 var count = 100;
 
-var content = 'Not found :-( ';
+var content = '404 infected - ';
 content += $('#error-message').html();
 
 var text = new PointText({
     point: view.center,
     justification: 'center',
-    content: content
-});
-
-text.characterStyle = {
-        fontSize: 60,
-        font: 'Roboto',
-        fillColor: 'black'
-};
-
-
-// Create a symbol, which we will use to place instances of later:
-var circle = new Path.Circle({
-    center: [0, 0],
-    radius: 20,
+    content: content,
+    fontSize: 80,
+    font: 'Source Sans Pro',
     fillColor: '#2980b9',
-    opacity: 0.5
+    opacity: 0.7
+
 });
 
-var symbol = new Symbol(circle);
+
+var center = new Point(0,0);
+var points = 8;
+var radius1 = 15;
+var radius2 = 25;
+var shape = new Path.Star(center, points, radius1, radius2);
+shape.fillColor = '#2980b9';
+shape.opacity = 0.5;
+
+var symbol = new Symbol(shape);
 
 //Place the instances of the symbol:
 for (var i = 0; i < count; i++) {
@@ -43,9 +42,8 @@ function onFrame(event) {
         var item = project.activeLayer.children[i];
         // Move the item 1/20th of its width to the right. This way
         // larger circles move faster than smaller circles:
-        if(item.bounds.width > 20){
-        	item.position.x += item.bounds.width / 200;
-        }else{
+        //Moves everything but the text
+        if(item.content == null){
            item.position.x += item.bounds.width / 20;
         }
         
@@ -56,5 +54,7 @@ function onFrame(event) {
         }
     }
     // Each frame, rotate the path by 3 degrees:
-	 circle.fillColor.hue += 1;
+	 shape.fillColor.hue += 1;
+	 text.fillColor.hue += 1;
+	 shape.rotate(1);
 }
