@@ -12,7 +12,6 @@ var text = new PointText({
     font: 'Source Sans Pro',
     fillColor: '#2980b9',
     opacity: 0.7
-
 });
 
 
@@ -56,5 +55,5 @@ function onFrame(event) {
     // Each frame, rotate the path by 3 degrees:
 	 shape.fillColor.hue += 1;
 	 text.fillColor.hue += 1;
-	 shape.rotate(1);
+	 shape.rotate(-1);
 }
