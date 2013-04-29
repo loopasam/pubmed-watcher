@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-
-<html>
+<html style="overflow: hidden;">
     <head>
-        <title>Not found</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=${_response_encoding}"/>    
+        <title>404 - Lost!</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Tailored biomedical literature feed based on PubMed articles.">
+        <meta name="author" content="Samuel Croset">
+        <meta name="keywords" content="pubmed, biomedical text, biomedical feed, literature feed, life science feed, literature management, biomedical article management">
+        <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
+        <link rel="stylesheet" media="screen" href="@{'/public/bootstrap/css/bootstrap.css'}">
+        #{get 'moreStyles' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/logo.png'}">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
+        <script src="@{'/public/bootstrap/js/bootstrap.min.js'}" type="text/javascript" charset="UTF-8"></script>
+        <script src="@{'/public/javascripts/analytics.js'}" type="text/javascript" charset="UTF-8"></script>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        #{get 'moreScripts' /}
     </head>
-    <body>
-        #{if play.mode.name() == 'DEV'}
-            #{404 result /}
-        #{/if}
-        #{else}
-            <h1>Not found</h1>
-            <p>
-                ${result.message}
-            </p>
-        #{/else}
-    </body>
+    <body style="padding-top: 0px;">
+    #{menu /}
+    #{set email:email /}
+    <div style="margin: 0px;">
+    <canvas style="margin: 0px;" id="myCanvas" resize></canvas>
+   	<script type="text/javascript" src="@{'/public/javascripts/paper.js'}"></script>
+	<script type="text/paperscript" src="@{'/public/javascripts/fourofour.js'}" canvas="myCanvas"></script>
+    <span id="error-message" display="none">${result.message}</span>
+   </div>
+ </body>
 </html>
