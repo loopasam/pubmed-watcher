@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Date;
 
+import play.Logger;
 import play.libs.Crypto;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -9,6 +10,7 @@ import play.mvc.Http;
 public class Presentation extends Controller {
 
 	public static void index() {
+				
 		Http.Cookie remember = request.cookies.get("pubmedwatcher");
 		if(remember != null) {
 			//The user is known --> login
