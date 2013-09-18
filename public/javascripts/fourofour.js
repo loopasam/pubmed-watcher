@@ -43,7 +43,7 @@ function onFrame(event) {
         // larger circles move faster than smaller circles:
         //Moves everything but the text
         if(item.content == null){
-           item.position.x += item.bounds.width / 20;
+           item.position.x += item.bounds.width / 40;
         }
         
         // If the item has left the view on the right, move it back
